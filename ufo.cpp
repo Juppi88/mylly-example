@@ -66,7 +66,7 @@ void Ufo::Spawn(Game *game)
 	m_game = game;
 
 	// Create an AI profile.
-	SetupAI(game);
+	SetupAI();
 }
 
 void Ufo::Update(Game *game)
@@ -99,7 +99,7 @@ void Ufo::OnCollideWith(Entity *other)
 	}
 }
 
-void Ufo::SetupAI(Game *game)
+void Ufo::SetupAI(void)
 {
 	ai_t *ai = obj_add_ai(GetSceneObject());
 	ai_behaviour_t *behaviour = ai_behaviour_create(ai);

@@ -48,7 +48,7 @@ public:
 	virtual void OnCollideWith(Entity *other);
 
 	int GetHealth(void) const { return m_health; }
-	bool IsDestroyed(void) const { return (m_health == 0); }
+	bool IsDestroyed(void) const { return (m_health <= 0); }
 
 protected:
 	Entity(EntityType type);
@@ -62,7 +62,7 @@ protected:
 	void SetCollidable(bool isCollidable) { m_isCollidable = isCollidable; }
 
 	void SetHealth(int health) { m_health = health; }
-	void DecreaseHealth(int amount = 1) { if (!IsDestroyed()) { --m_health; } }
+	void DecreaseHealth(int amount = 1) { if (!IsDestroyed()) { m_health -= amount; } }
 	void Kill(void) { m_health = 0; }
 
 private:

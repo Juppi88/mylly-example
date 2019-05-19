@@ -58,6 +58,8 @@ Scene::~Scene(void)
 
 void Scene::Create(Game *game)
 {
+	UNUSED(game);
+	
 	// Create a scene root.
 	m_sceneRoot = scene_create();
 	mylly_set_scene(m_sceneRoot);

@@ -12,6 +12,8 @@ public:
 	virtual void SetupLevel(Game *game) override;
 	virtual void Update(Game *game) override;
 
+	virtual void OnEntityDestroyed(Game *game, Entity *entity) override;
+
 private:
 	void CreateMainMenu(Game *game);
 	

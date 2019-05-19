@@ -46,6 +46,12 @@ void MenuScene::Update(Game *game)
 	Scene::Update(game);
 }
 
+void MenuScene::OnEntityDestroyed(Game *game, Entity *entity)
+{
+	UNUSED(game);
+	UNUSED(entity);
+}
+
 void MenuScene::CreateMainMenu(Game *game)
 {
 	// Create a container widget for the main menu and align it to the centre of the screen.
@@ -103,6 +109,8 @@ void MenuScene::OnSelectedStartGame(widget_t *button)
 
 void MenuScene::OnSelectedExitGame(widget_t *button)
 {
+	UNUSED(button);
+
 	// This will perform cleanup and exit the game immediately.
 	mylly_exit();
 }

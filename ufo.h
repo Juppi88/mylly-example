@@ -17,7 +17,7 @@ public:
 	virtual void OnCollideWith(Entity *other) override;
 
 private:
-	void SetupAI(Game *game);
+	void SetupAI(void);
 
 	// Ideally AI tasks would exist in their own classes but since this is a simple demo we don't
 	// want to clutter things too much with small classes.

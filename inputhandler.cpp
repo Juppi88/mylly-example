@@ -61,6 +61,9 @@ bool InputHandler::IsPressingGodmodeButton(void) const
 
 bool InputHandler::ExitApp(uint32_t key, bool pressed, void *context)
 {
+	UNUSED(key);
+	UNUSED(context);
+	
 	if (!pressed) {
 		return true;
 	}

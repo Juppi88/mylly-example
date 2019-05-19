@@ -82,7 +82,7 @@ void Asteroid::SetSize(AsteroidSize size)
 	obj_set_local_scale(GetSceneObject(), vec3(scale, scale, scale));
 	
 	SetBoundingRadius(0.8f * scale);
-	SetMass(100.0f * scale);
+	SetMass(mass);
 	SetMaxSpeed(GetSpeedMultiplier() * MOVEMENT_SPEED_MAX);
 }
 

@@ -25,7 +25,7 @@ public:
 
 	void FadeCamera(bool fadeIn);
 
-	virtual void OnEntityDestroyed(Game *game, Entity *entity) {}
+	virtual void OnEntityDestroyed(Game *game, Entity *entity) = 0;
 
 protected:
 	void CreateCamera(void);
