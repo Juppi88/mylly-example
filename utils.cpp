@@ -6,8 +6,8 @@
 
 // -------------------------------------------------------------------------------------------------
 
-const colour_t Utils::LABEL_COLOUR;
-const colour_t Utils::HOVERED_LABEL_COLOUR;
+constexpr colour_t Utils::LABEL_COLOUR;
+constexpr colour_t Utils::HOVERED_LABEL_COLOUR;
 
 // -------------------------------------------------------------------------------------------------
 
