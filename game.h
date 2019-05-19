@@ -6,6 +6,10 @@
 
 // -------------------------------------------------------------------------------------------------
 
+class Editor;
+
+// -------------------------------------------------------------------------------------------------
+
 enum PowerUpType {
 
 	POWERUP_NONE, // Regular poor weapon
@@ -85,4 +89,6 @@ private:
 
 	uint32_t m_scoreSinceLastPowerUp = 0;
 	PowerUpType m_currentPowerUp = POWERUP_NONE;
+
+	Editor *m_editor = nullptr;
 };

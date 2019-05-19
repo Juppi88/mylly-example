@@ -5,6 +5,7 @@
 #include "gamescene.h"
 #include "menuscene.h"
 #include "ui.h"
+#include "editor/editor.h"
 #include <mylly/core/mylly.h>
 #include <mylly/scene/scene.h>
 
@@ -17,6 +18,9 @@ Game::Game(void)
 	m_collisionHandler = new CollisionHandler();
 	m_input = new InputHandler();
 	m_ui = new UI();
+	
+	// Create an editor system for testing.
+	m_editor = new Editor();
 }
 
 Game::~Game(void)
@@ -24,6 +28,7 @@ Game::~Game(void)
 	delete m_input;
 	delete m_ui;
 	delete m_scene;
+	delete m_editor;
 
 	if (m_nextScene != nullptr) {
 		delete m_nextScene;
@@ -32,6 +37,9 @@ Game::~Game(void)
 
 void Game::SetupGame(void)
 {
+	// Create the editor windows.
+	m_editor->Create();
+
 	// Setup UI.
 	m_ui->Create();
 
@@ -70,6 +78,8 @@ void Game::LoadLevel(uint32_t level)
 
 void Game::Update(void)
 {
+	m_editor->Process();
+
 	m_scene->Update(this);
 
 	if (IsLoadingLevel()) {
