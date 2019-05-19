@@ -1,0 +1,3 @@
+[submodule "mylly"]
+	path = mylly
+	url = https://git.project-apollo.co.uk/mylly/mylly-engine.git
