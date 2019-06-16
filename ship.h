@@ -13,11 +13,12 @@ public:
 
 	virtual void Spawn(Game *game) override;
 	virtual void Update(Game *game) override;
+	virtual void Destroy(Game *game) override;
 
 	// Call this before update.
 	void ProcessInput(Game *game);
 
-	virtual void OnCollideWith(Entity *other) override;
+	virtual void OnCollideWith(const Game *game, Entity *other) override;
 
 private:
 	void UpdateControls(const InputHandler *input);
@@ -31,4 +32,6 @@ private:
 
 	float m_heading = 0;
 	float m_nextWeaponFire = 0;
+
+	emitter_t *m_trailEmitter = nullptr; // Engine trail particle emitter
 };

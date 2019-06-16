@@ -45,10 +45,12 @@ public:
 	bool IsCollidable(void) const { return m_isCollidable; }
 	bool IsColliding(void) const { return (m_collisionEntity != nullptr); }
 	bool WasCollidingWith(Entity *other) const { return (m_previousCollisionEntity == other); }
-	virtual void OnCollideWith(Entity *other);
+	virtual void OnCollideWith(const Game *game, Entity *other);
 
 	int GetHealth(void) const { return m_health; }
 	bool IsDestroyed(void) const { return (m_health <= 0); }
+
+	object_t *GetSceneObject(void) const { return m_sceneObject; }
 
 protected:
 	Entity(EntityType type);
@@ -56,7 +58,6 @@ protected:
 	void SetBoundingRadius(float radius) { m_boundingRadius = radius; }
 	void SetMass(float mass) { m_mass = mass; }
 
-	object_t *GetSceneObject(void) const { return m_sceneObject; }
 	void SetSceneObject(object_t *obj) { m_sceneObject = obj; }
 
 	void SetCollidable(bool isCollidable) { m_isCollidable = isCollidable; }

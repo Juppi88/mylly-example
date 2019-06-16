@@ -3,6 +3,7 @@
 #include "game.h"
 #include <mylly/scene/object.h>
 #include <mylly/scene/light.h>
+#include <mylly/scene/emitter.h>
 #include <mylly/resources/resources.h>
 #include <mylly/core/time.h>
 #include <mylly/math/math.h>
@@ -52,6 +53,9 @@ void Projectile::Spawn(Game *game)
 	light_set_colour(light, col(100, 150, 200));
 	light_set_intensity(light, 3);
 
+	// Attach a particle emitter to the projectile for a trail effect.
+	m_trailEmitter = game->GetScene()->SpawnEffect("projectile-trail", GetPosition());
+
 	// Projectiles are automatically destroyed after a while if they don't hit anything.
 	m_expiresTime = get_time().time + LIFETIME;
 }
@@ -63,6 +67,10 @@ void Projectile::Destroy(Game *game)
 	}
 
 	game->GetScene()->GetProjectileHandler()->RemoveReference(this);
+
+	// Stop trail particle emitter. The effect is automatically destroyed when it no longer has
+	// active particles.
+	emitter_stop(m_trailEmitter);
 
 	// Do final cleanup.
 	Entity::Destroy(game);
@@ -86,11 +94,16 @@ void Projectile::Update(Game *game)
 
 		Destroy(game);
 	}
+
+	// Update trail emitter position in the scene.
+	if (m_trailEmitter != nullptr) {
+		obj_set_position(m_trailEmitter->parent, GetScenePosition().vec());
+	}
 }
 
-void Projectile::OnCollideWith(Entity *other)
+void Projectile::OnCollideWith(const Game *game, Entity *other)
 {
-	Entity::OnCollideWith(other);
+	Entity::OnCollideWith(game, other);
 
 	// Self destruct when hitting a non-projectile target that is not the owher of this projectile.
 	if (other != m_owner &&

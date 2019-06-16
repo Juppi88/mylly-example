@@ -78,7 +78,6 @@ void GameScene::Update(Game *game)
 			SpawnEffect("ship-explosion", m_ship->GetPosition());
 
 			// Remove the ship from the game.
-			// TODO: Spawn an explosion or some other cool effect!
 			m_ship->Destroy(game);
 			m_ship = nullptr;
 
@@ -103,8 +102,10 @@ void GameScene::Update(Game *game)
 
 		if (m_ufo->IsDestroyed()) {
 
+			// Spawn an explosion effect in the UFO's place.
+			SpawnEffect("ship-explosion", m_ufo->GetPosition());
+
 			// Remove the UFO from the game.
-			// TODO: Spawn an explosion or some other cool effect!
 			m_ufo->Destroy(game);
 			m_ufo = nullptr;
 

@@ -82,7 +82,9 @@ void Entity::SetPosition(const Vec2 &position)
 	}
 }
 
-void Entity::OnCollideWith(Entity *other)
+void Entity::OnCollideWith(const Game *game, Entity *other)
 {
+	UNUSED(game);
+	
 	m_collisionEntity = other;
 }

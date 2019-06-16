@@ -70,8 +70,8 @@ void CollisionHandler::Update(const Game *game)
 					ApplyCollisionResponse(entity, other);
 				}
 
-				entity->OnCollideWith(other);
-				other->OnCollideWith(entity);
+				entity->OnCollideWith(game, other);
+				other->OnCollideWith(game, entity);
 			}
 		}
 	}

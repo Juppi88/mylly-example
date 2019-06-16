@@ -86,9 +86,9 @@ void Ufo::Update(Game *game)
 	Entity::Update(game);
 }
 
-void Ufo::OnCollideWith(Entity *other)
+void Ufo::OnCollideWith(const Game *game, Entity *other)
 {
-	Entity::OnCollideWith(other);
+	Entity::OnCollideWith(game, other);
 
 	// The UFO isn't affected by asteroid hits, however if the player hits the UFO with their
 	// weapons, the UFO's health will be decreased.

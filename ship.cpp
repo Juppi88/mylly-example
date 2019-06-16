@@ -5,6 +5,7 @@
 #include "inputhandler.h"
 #include <mylly/scene/object.h>
 #include <mylly/scene/scene.h>
+#include <mylly/scene/emitter.h>
 #include <mylly/resources/resources.h>
 #include <mylly/core/time.h>
 #include <mylly/math/math.h>
@@ -50,6 +51,22 @@ void Ship::Spawn(Game *game)
 
 	// Rotate the ship model so it's top side up, heading right.
 	obj_set_local_rotation(shipObject, quat_from_euler_deg(180, 90, 0));
+
+	// Attach a particle emitter to the ship for the engine acceleration effect.
+	m_trailEmitter = game->GetScene()->SpawnEffect("engine-trail", GetPosition());
+}
+
+void Ship::Destroy(Game *game)
+{
+	if (!IsSpawned()) {
+		return;
+	}
+	// Stop trail particle emitter. The effect is automatically destroyed when it no longer has
+	// active particles.
+	emitter_stop(m_trailEmitter);
+
+	// Do final cleanup.
+	Entity::Destroy(game);
 }
 
 void Ship::Update(Game *game)
@@ -57,6 +74,19 @@ void Ship::Update(Game *game)
 	// Update the ship's transformation.
 	obj_set_position(GetSceneObject(), GetScenePosition().vec());
 	obj_set_local_rotation(GetSceneObject(), quat_from_euler_deg(0, m_heading, 0));
+
+	// Update trail emitter position in the scene.
+	if (m_trailEmitter != nullptr) {
+
+		Vec2 effectOffset = Vec2(-1.2f, 0);
+		effectOffset = vec2_rotate(effectOffset.vec(), -DEG_TO_RAD(m_heading));
+
+		Vec2 effectPosition = GetPosition() + effectOffset;
+		vec3_t position = vec3(effectPosition.x(), GetDrawDepth(), effectPosition.y());
+
+		obj_set_position(m_trailEmitter->parent, position);
+		obj_set_local_rotation(m_trailEmitter->parent, quat_from_euler_deg(90, 0, 90 - m_heading));
+	}
 
 	Entity::Update(game);
 }
@@ -100,6 +130,11 @@ void Ship::ProcessInput(Game *game)
 		velocity *= speed;
 
 		SetVelocity(velocity);
+
+		emitter_set_emit_rate(m_trailEmitter, 500);
+	}
+	else {
+		emitter_set_emit_rate(m_trailEmitter, 20);
 	}
 
 	// Apply movement to ship's position.
@@ -116,9 +151,9 @@ void Ship::ProcessInput(Game *game)
 	}
 }
 
-void Ship::OnCollideWith(Entity *other)
+void Ship::OnCollideWith(const Game *game, Entity *other)
 {
-	Entity::OnCollideWith(other);
+	Entity::OnCollideWith(game, other);
 
 	// Set the ship's health to 0. The scene will destroy the ship when convenient and spawn
 	// an explosion or some other cool effect.

@@ -23,7 +23,7 @@ public:
 	bool IsOwnedByPlayer(void) const { return (m_owner != nullptr && m_owner->GetType() == ENTITY_SHIP); }
 	float GetSpeed(void) const { return SPEED; }
 
-	virtual void OnCollideWith(Entity *other) override;
+	virtual void OnCollideWith(const Game *game, Entity *other) override;
 
 private:
 	static constexpr float SPEED = 25.0f; // Units/Sec
@@ -31,4 +31,6 @@ private:
 
 	Entity *m_owner = nullptr; // Entity which fired the projectile
 	float m_expiresTime = 0; // Time when the projectile should self-destruct
+
+	emitter_t *m_trailEmitter = nullptr; // Projectile trail particle emitter
 };

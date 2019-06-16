@@ -142,13 +142,13 @@ void Scene::FadeCamera(bool fadeIn)
 	shader_set_uniform_colour(m_fadeShader, "Colour", startColour);
 }
 
-void Scene::SpawnEffect(const char *effectName, const Vec2 &position)
+emitter_t *Scene::SpawnEffect(const char *effectName, const Vec2 &position) const
 {
 	// Find the effect resource.
 	emitter_t *effect = res_get_emitter(effectName);
 
 	if (effect == nullptr) {
-		return;
+		return nullptr;
 	}
 
 	// Spawn the object and attach a particle emitter to it.
@@ -162,6 +162,8 @@ void Scene::SpawnEffect(const char *effectName, const Vec2 &position)
 	// Set the emitter to be destroyed after it becomes inactive and start it.
 	emitter_destroy_when_inactive(emitter);
 	emitter_start(emitter);
+
+	return emitter;
 }
 
 void Scene::CreateCamera(void)

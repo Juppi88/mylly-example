@@ -12,7 +12,7 @@ public:
 
 	virtual void Spawn(Game *game) override;
 
-	virtual void OnCollideWith(Entity *other) override;
+	virtual void OnCollideWith(const Game *game, Entity *other) override;
 
 private:
 	static constexpr float MAX_SPEED = 5.0f;

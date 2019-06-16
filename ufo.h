@@ -14,7 +14,7 @@ public:
 	virtual void Spawn(Game *game) override;
 	virtual void Update(Game *game) override;
 
-	virtual void OnCollideWith(Entity *other) override;
+	virtual void OnCollideWith(const Game *game, Entity *other) override;
 
 private:
 	void SetupAI(void);

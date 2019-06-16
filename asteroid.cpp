@@ -103,20 +103,25 @@ void Asteroid::Destroy(Game *game)
 		return;
 	}
 
-	game->GetScene()->GetAsteroidHandler()->RemoveReference(this);
+	// Spawn a cool asteroid breaking effect.
+	game->GetScene()->SpawnEffect("asteroid-explosion", GetPosition());
 
 	// Do final cleanup.
+	game->GetScene()->GetAsteroidHandler()->RemoveReference(this);
 	Entity::Destroy(game);
 }
 
-void Asteroid::OnCollideWith(Entity *other)
+void Asteroid::OnCollideWith(const Game *game, Entity *other)
 {
-	Entity::OnCollideWith(other);
+	Entity::OnCollideWith(game, other);
 
 	if (other->GetType() == ENTITY_PROJECTILE &&
 		((Projectile *)other)->IsOwnedByPlayer()) { // Ignore hits by UFO projectiles
 
 		// Calculate damage to the asteroid.
 		DecreaseHealth();
+	}
+	else if (other->GetType() == ENTITY_ASTEROID) {
+		game->GetScene()->SpawnEffect("asteroid-dust", GetPosition());
 	}
 }

@@ -39,9 +39,9 @@ void PowerUp::Spawn(Game *game)
 	SetVelocity(direction * speed);
 }
 
-void PowerUp::OnCollideWith(Entity *other)
+void PowerUp::OnCollideWith(const Game *game, Entity *other)
 {
-	Entity::OnCollideWith(other);
+	Entity::OnCollideWith(game, other);
 
 	// If the powerup collided with the player ship, it was collected. Destroy the powerup which
 	// will inform the game that it was collected.

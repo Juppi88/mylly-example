@@ -28,7 +28,7 @@ public:
 
 	void SetDirection(const Vec2 &direction);
 
-	virtual void OnCollideWith(Entity *other) override;
+	virtual void OnCollideWith(const Game *game, Entity *other) override;
 
 private:
 	float GetSpeedMultiplier(void) const { return 3.0f / (m_size + 1); }
