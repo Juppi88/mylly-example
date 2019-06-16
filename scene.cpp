@@ -11,6 +11,7 @@
 #include <mylly/scene/camera.h>
 #include <mylly/scene/sprite.h>
 #include <mylly/scene/light.h>
+#include <mylly/scene/emitter.h>
 #include <mylly/resources/resources.h>
 
 // -------------------------------------------------------------------------------------------------
@@ -139,6 +140,28 @@ void Scene::FadeCamera(bool fadeIn)
 	}
 
 	shader_set_uniform_colour(m_fadeShader, "Colour", startColour);
+}
+
+void Scene::SpawnEffect(const char *effectName, const Vec2 &position)
+{
+	// Find the effect resource.
+	emitter_t *effect = res_get_emitter(effectName);
+
+	if (effect == nullptr) {
+		return;
+	}
+
+	// Spawn the object and attach a particle emitter to it.
+	object_t *effectObject = scene_create_object(m_sceneRoot, nullptr);
+	emitter_t *emitter = obj_add_emitter(effectObject, effect);
+
+	// Move the object to the desired position and rotate it towards the camera.
+	obj_set_position(effectObject, vec3(position.x(), 0, position.y()));
+	obj_set_local_rotation(effectObject, quat_from_euler_deg(90, 0, 0));
+
+	// Set the emitter to be destroyed after it becomes inactive and start it.
+	emitter_destroy_when_inactive(emitter);
+	emitter_start(emitter);
 }
 
 void Scene::CreateCamera(void)

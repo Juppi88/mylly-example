@@ -71,13 +71,16 @@ void GameScene::Update(Game *game)
 
 		if (m_ship->IsDestroyed()) {
 
+			// Inform the game handler that the ship was destroyed.
+			game->OnShipDestroyed();
+
+			// Spawn an explosion effect in the ship's place.
+			SpawnEffect("ship-explosion", m_ship->GetPosition());
+
 			// Remove the ship from the game.
 			// TODO: Spawn an explosion or some other cool effect!
 			m_ship->Destroy(game);
 			m_ship = nullptr;
-
-			// Inform the game handler that the ship was destroyed.
-			game->OnShipDestroyed();
 
 			// Update UI.
 			game->GetUI()->SetShipCount(game->GetShips());

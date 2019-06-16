@@ -22,8 +22,8 @@ file(REMOVE ${OUTPUT_DIR})
 
 # Define compiler flags.
 set(CMAKE_CXX_FLAGS         "-Wall -Wextra -std=c++11 -DCGLM_ALL_UNALIGNED")
-set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS} -g -D_DEBUG -DDEBUG")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O4 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG   "-g -D_DEBUG -DDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-O4 -DNDEBUG")
 
 # Add the CMake scripts for the engine library and editor utilities.
 add_subdirectory("mylly/mylly")
@@ -41,6 +41,7 @@ target_link_libraries(game mylly_editor mylly)
 
 # Copy the game's resource files to the output directory.
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/mylly/mylly/resources/shaders DESTINATION ${OUTPUT_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/effects DESTINATION ${OUTPUT_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/fonts DESTINATION ${OUTPUT_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/models DESTINATION ${OUTPUT_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/textures DESTINATION ${OUTPUT_DIR})

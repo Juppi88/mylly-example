@@ -66,6 +66,8 @@ public:
 	PowerUpType GetCurrentPowerUp(void) const { return m_currentPowerUp; }
 	void OnPowerUpCollected(void);
 
+	Editor *GetEditor(void) const { return m_editor; }
+
 private:
 	bool IsLoadingLevel(void) const { return (m_nextScene != nullptr); }
 

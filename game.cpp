@@ -16,7 +16,7 @@ Game::Game(void)
 	Utils::Initialize();
 
 	m_collisionHandler = new CollisionHandler();
-	m_input = new InputHandler();
+	m_input = new InputHandler(this);
 	m_ui = new UI();
 	
 	// Create an editor system for testing.
@@ -33,6 +33,8 @@ Game::~Game(void)
 	if (m_nextScene != nullptr) {
 		delete m_nextScene;
 	}
+
+	delete m_collisionHandler;
 }
 
 void Game::SetupGame(void)
@@ -155,6 +157,9 @@ Vec2 Game::WrapBoundaries(const Vec2 &position) const
 void Game::ChangeScene(void)
 {
 	if (m_scene != nullptr) {
+
+		// Inform the editor that the scene is changing.
+		m_editor->OnSceneUnload();
 	
 		delete m_scene;
 		m_collisionHandler->UnregisterAllEntities();
@@ -167,7 +172,10 @@ void Game::ChangeScene(void)
 
 	// Start the game.
 	m_scene->SetupLevel(this);
-	
+
+	// Update editor (i.e. objects being edited).
+	m_editor->OnSceneLoad(m_scene->GetSceneRoot());
+
 	m_ui->SetScore(m_score);
 	m_isLevelCompleted = false;
 

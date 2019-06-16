@@ -25,6 +25,8 @@ public:
 
 	void FadeCamera(bool fadeIn);
 
+	void SpawnEffect(const char *effectName, const Vec2 &position);
+
 	virtual void OnEntityDestroyed(Game *game, Entity *entity) = 0;
 
 protected:
