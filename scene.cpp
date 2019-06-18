@@ -13,6 +13,7 @@
 #include <mylly/scene/light.h>
 #include <mylly/scene/emitter.h>
 #include <mylly/resources/resources.h>
+#include <mylly/math/random.h>
 
 // -------------------------------------------------------------------------------------------------
 
@@ -100,6 +101,10 @@ void Scene::Update(Game *game)
 	if (IsFading()) {
 		ProcessFade(game);
 	}
+
+	if (IsShaking()) {
+		ProcessShake();
+	}
 }
 
 void Scene::CalculateBoundaries(Vec2 &outMin, Vec2 &outMax)
@@ -125,6 +130,20 @@ void Scene::CalculateBoundaries(Vec2 &outMin, Vec2 &outMax)
 	outMax = vec2(max.x + padding, max.z + padding);
 }
 
+void Scene::AddCameraEffect(shader_t *effect)
+{
+	if (effect != nullptr) {
+		camera_add_post_processing_effect(m_camera, effect);
+	}
+}
+
+void Scene::RemoveCameraEffect(shader_t *effect)
+{
+	if (effect != nullptr) {
+		camera_remove_post_processing_effect(m_camera, effect);
+	}
+}
+
 void Scene::FadeCamera(bool fadeIn)
 {
 	m_isFadingIn = fadeIn;
@@ -140,6 +159,13 @@ void Scene::FadeCamera(bool fadeIn)
 	}
 
 	shader_set_uniform_colour(m_fadeShader, "Colour", startColour);
+}
+
+void Scene::ShakeCamera(float intensity, float duration)
+{
+	m_shakeIntensity = intensity;
+	m_shakeDuration = duration;
+	m_shakeElapsed = 0;
 }
 
 emitter_t *Scene::SpawnEffect(const char *effectName, const Vec2 &position) const
@@ -160,7 +186,7 @@ emitter_t *Scene::SpawnEffect(const char *effectName, const Vec2 &position) cons
 	obj_set_local_rotation(effectObject, quat_from_euler_deg(90, 0, 0));
 
 	// Set the emitter to be destroyed after it becomes inactive and start it.
-	emitter_destroy_when_inactive(emitter);
+	emitter_set_destroy_when_inactive(emitter, true);
 	emitter_start(emitter);
 
 	return emitter;
@@ -173,7 +199,7 @@ void Scene::CreateCamera(void)
 	m_camera = obj_add_camera(cameraObject);
 
 	// Setup the camera's view.
-	obj_set_position(cameraObject, vector3(0.0f, -50.0f, 0.0f));
+	obj_set_position(cameraObject, vector3(0.0f, CAMERA_DEPTH, 0.0f));
 	obj_look_at(cameraObject, vec3_zero(), vec3_forward());
 
 	camera_set_orthographic_projection(m_camera, 45, ORTOGRAPHIC_NEAR, 100);
@@ -277,4 +303,33 @@ void Scene::ProcessFade(Game *game)
 
 	colour_t fadeColour = col_lerp(start, end, t);
 	shader_set_uniform_colour(m_fadeShader, "Colour", fadeColour);
+}
+
+void Scene::ProcessShake(void)
+{
+	if (m_camera == nullptr) {
+		return;
+	}
+	
+	// Apply the shake effect offset to the camera. The camera is always centered at the origin.
+	Vec3 position = Vec3(0, CAMERA_DEPTH, 0);
+
+	if (m_shakeElapsed < m_shakeDuration) {
+
+		float t = 1.0f - m_shakeElapsed / m_shakeDuration;
+
+		position = Vec3(
+			m_shakeIntensity * expf(-2 * t) * cosf(randomf(0, 20)) * t,
+			CAMERA_DEPTH,
+			m_shakeIntensity * expf(-2 * t) * sinf(randomf(0, 20)) * t
+		);
+
+	}
+	else {
+		m_shakeDuration = 0;
+	}
+
+	obj_set_position(m_camera->parent, position.vec());
+
+	m_shakeElapsed += get_time().delta_time;
 }

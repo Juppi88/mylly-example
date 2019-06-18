@@ -22,4 +22,6 @@ private:
 	Ship *m_ship = nullptr;
 	Ufo *m_ufo = nullptr;
 	PowerUp *m_powerUp = nullptr;
+
+	float m_playerShipSpawnTime = 0;
 };

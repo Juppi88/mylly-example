@@ -8,6 +8,7 @@
 #include "asteroidhandler.h"
 #include "projectilehandler.h"
 #include "inputhandler.h"
+#include <mylly/core/time.h>
 
 // -------------------------------------------------------------------------------------------------
 
@@ -35,10 +36,6 @@ void GameScene::SetupLevel(Game *game)
 	// Select the level's background.
 	SetBackground(game->GetLevel() - 1);
 
-	// Create the player's ship.
-	m_ship = new Ship();
-	m_ship->Spawn(game);
-
 	// Spawn some asteroids.
 	m_asteroids->SpawnInitialAsteroids(game, ASTEROID_LARGE, 2 + game->GetLevel());
 
@@ -48,10 +45,23 @@ void GameScene::SetupLevel(Game *game)
 	// Display the in-game HUD.
 	game->GetUI()->ToggleHUD(true);
 	game->GetUI()->ShowLevelLabel(game->GetLevel());
+
+	// Spawn the player's ship into the scene after a small delay.
+	m_playerShipSpawnTime = get_time().time + 1;
 }
 
 void GameScene::Update(Game *game)
 {
+	if (m_playerShipSpawnTime != 0 &&
+		get_time().time >= m_playerShipSpawnTime) {
+
+		// Create the player's ship.
+		m_ship = new Ship();
+		m_ship->Spawn(game);
+
+		m_playerShipSpawnTime = 0;
+	}
+
 	// Check whether a UFO should appear in the game.
 	if (game->ShouldUFOSpawn() && m_ufo == nullptr) {
 
@@ -76,6 +86,9 @@ void GameScene::Update(Game *game)
 
 			// Spawn an explosion effect in the ship's place.
 			SpawnEffect("ship-explosion", m_ship->GetPosition());
+
+			// Shake the camera to amplify the effect.
+			game->GetScene()->ShakeCamera(1.0f, 0.5f);
 
 			// Remove the ship from the game.
 			m_ship->Destroy(game);

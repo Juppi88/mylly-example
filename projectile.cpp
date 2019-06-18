@@ -110,5 +110,8 @@ void Projectile::OnCollideWith(const Game *game, Entity *other)
 		other->GetType() != ENTITY_PROJECTILE) {
 
 		Kill();
+
+		// Spawn a hit effect.
+		game->GetScene()->SpawnEffect("projectile-hit", GetPosition());
 	}
 }

@@ -23,7 +23,10 @@ public:
 
 	void CalculateBoundaries(Vec2 &outMin, Vec2 &outMax);
 
+	void AddCameraEffect(shader_t *effect);
+	void RemoveCameraEffect(shader_t *effect);
 	void FadeCamera(bool fadeIn);
+	void ShakeCamera(float intensity = 1, float duration = 0.5f);
 
 	emitter_t *SpawnEffect(const char *effectName, const Vec2 &position) const;
 
@@ -39,8 +42,12 @@ protected:
 	bool IsFading(void) const { return (m_fadeEffectEnds != 0); }
 	void ProcessFade(Game *game);
 
+	bool IsShaking(void) const { return (m_shakeDuration != 0); }
+	void ProcessShake(void);
+
 protected:
 	static constexpr float FADE_DURATION = 0.5f;
+	static constexpr float CAMERA_DEPTH = -50.0f;
 
 	AsteroidHandler *m_asteroids = nullptr;
 	ProjectileHandler *m_projectiles = nullptr;
@@ -56,4 +63,8 @@ protected:
 	shader_t *m_fadeShader = nullptr;
 	float m_fadeEffectEnds = 0;
 	bool m_isFadingIn = false;
+
+	float m_shakeDuration = 0;
+	float m_shakeIntensity = 0;
+	float m_shakeElapsed = 0;
 };

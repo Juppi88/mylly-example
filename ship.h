@@ -34,4 +34,6 @@ private:
 	float m_nextWeaponFire = 0;
 
 	emitter_t *m_trailEmitter = nullptr; // Engine trail particle emitter
+
+	WarpEffect *m_warpEffect = nullptr; // Effect used for spawning the ship
 };

@@ -15,3 +15,4 @@ class Scene;
 class Ship;
 class Ufo;
 class UI;
+class WarpEffect;

@@ -3,6 +3,7 @@
 #include "projectilehandler.h"
 #include "projectile.h"
 #include "inputhandler.h"
+#include "warpeffect.h"
 #include <mylly/scene/object.h>
 #include <mylly/scene/scene.h>
 #include <mylly/scene/emitter.h>
@@ -54,6 +55,12 @@ void Ship::Spawn(Game *game)
 
 	// Attach a particle emitter to the ship for the engine acceleration effect.
 	m_trailEmitter = game->GetScene()->SpawnEffect("engine-trail", GetPosition());
+
+	emitter_set_destroy_when_inactive(m_trailEmitter, false);
+
+	// Spawn a warp effect.
+	m_warpEffect = new WarpEffect(this);
+	m_warpEffect->Setup(game);
 }
 
 void Ship::Destroy(Game *game)
@@ -61,6 +68,7 @@ void Ship::Destroy(Game *game)
 	if (!IsSpawned()) {
 		return;
 	}
+
 	// Stop trail particle emitter. The effect is automatically destroyed when it no longer has
 	// active particles.
 	emitter_stop(m_trailEmitter);
@@ -86,6 +94,15 @@ void Ship::Update(Game *game)
 
 		obj_set_position(m_trailEmitter->parent, position);
 		obj_set_local_rotation(m_trailEmitter->parent, quat_from_euler_deg(90, 0, 90 - m_heading));
+	}
+
+	// Update warp effect.
+	if (m_warpEffect != nullptr &&
+		m_warpEffect->Update(game)) {
+
+		// The effect has finished, destroy it.
+		delete m_warpEffect;
+		m_warpEffect = nullptr;
 	}
 
 	Entity::Update(game);
@@ -131,10 +148,13 @@ void Ship::ProcessInput(Game *game)
 
 		SetVelocity(velocity);
 
-		emitter_set_emit_rate(m_trailEmitter, 500);
+		// Activate the trail emitter when the ship is accelerating.
+		if (!m_trailEmitter->is_emitting) {
+			emitter_start(m_trailEmitter);
+		}
 	}
-	else {
-		emitter_set_emit_rate(m_trailEmitter, 20);
+	else if (m_trailEmitter->is_emitting) {
+		emitter_stop(m_trailEmitter);
 	}
 
 	// Apply movement to ship's position.
