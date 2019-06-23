@@ -8,6 +8,8 @@ public:
 	GameScene(void);
 	~GameScene(void);
 
+	virtual SceneType GetType(void) const override { return SCENE_GAME; }
+
 	virtual void Create(Game *game) override;
 	virtual void SetupLevel(Game *game) override;
 	virtual void Update(Game *game) override;

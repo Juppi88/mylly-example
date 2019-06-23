@@ -9,6 +9,8 @@
 #include "projectilehandler.h"
 #include "inputhandler.h"
 #include <mylly/core/time.h>
+#include <mylly/resources/resources.h>
+#include <mylly/audio/audiosystem.h>
 
 // -------------------------------------------------------------------------------------------------
 
@@ -89,6 +91,9 @@ void GameScene::Update(Game *game)
 
 			// Shake the camera to amplify the effect.
 			game->GetScene()->ShakeCamera(1.0f, 0.5f);
+
+			// Play an explosion sound effect.
+			audio_play_sound(res_get_sound("Explosion"), 0);
 
 			// Remove the ship from the game.
 			m_ship->Destroy(game);

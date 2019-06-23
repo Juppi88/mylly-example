@@ -12,6 +12,7 @@
 #include <mylly/scene/sprite.h>
 #include <mylly/scene/light.h>
 #include <mylly/scene/emitter.h>
+#include <mylly/audio/audiosystem.h>
 #include <mylly/resources/resources.h>
 #include <mylly/math/random.h>
 
@@ -46,6 +47,8 @@ Scene::~Scene(void)
 	delete m_projectiles;
 
 	obj_destroy(m_camera->parent);
+	m_camera = nullptr;
+
 	obj_destroy(m_spaceBackground);
 
 	obj_destroy(m_directionalLights[0]->parent);
@@ -98,12 +101,13 @@ void Scene::SetBackground(uint32_t backgroundIndex)
 
 void Scene::Update(Game *game)
 {
-	if (IsFading()) {
-		ProcessFade(game);
-	}
-
 	if (IsShaking()) {
 		ProcessShake();
+	}
+
+	// Process fade after everything else because when the fade ends the scene can be deleted.
+	if (IsFading()) {
+		ProcessFade(game);
 	}
 }
 
@@ -146,6 +150,7 @@ void Scene::RemoveCameraEffect(shader_t *effect)
 
 void Scene::FadeCamera(bool fadeIn)
 {
+	m_fadeFactor = (fadeIn ? 0 : 1);
 	m_isFadingIn = fadeIn;
 	m_fadeEffectEnds = get_time().time + FADE_DURATION;
 
@@ -206,6 +211,9 @@ void Scene::CreateCamera(void)
 
 	// Apply anti-aliasing to the rendering result.
 	camera_add_post_processing_effect(m_camera, res_get_shader("effect-fxaa"));
+
+	// Make the camera the audio listener.
+	audio_set_listener(cameraObject);
 }
 
 object_t *Scene::CreateCameraTexture(const char *spriteName, bool isBackground)
@@ -272,6 +280,7 @@ void Scene::ProcessFade(Game *game)
 
 	if (time >= m_fadeEffectEnds) {
 
+		m_fadeFactor = (m_isFadingIn ? 0 : 1);
 		m_fadeEffectEnds = 0;
 		obj_set_active(m_fader, false);
 
@@ -290,6 +299,8 @@ void Scene::ProcessFade(Game *game)
 	float timeLeft = m_fadeEffectEnds - time;
 	float t = 1.0f - (timeLeft / FADE_DURATION);
 
+	m_fadeFactor = (m_isFadingIn ? t : 1.0f - t);
+
 	colour_t start, end;
 
 	if (m_isFadingIn) {
@@ -307,7 +318,8 @@ void Scene::ProcessFade(Game *game)
 
 void Scene::ProcessShake(void)
 {
-	if (m_camera == nullptr) {
+	if (m_camera == nullptr ||
+		m_camera->parent == nullptr) {
 		return;
 	}
 	
@@ -323,7 +335,6 @@ void Scene::ProcessShake(void)
 			CAMERA_DEPTH,
 			m_shakeIntensity * expf(-2 * t) * sinf(randomf(0, 20)) * t
 		);
-
 	}
 	else {
 		m_shakeDuration = 0;

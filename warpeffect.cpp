@@ -8,6 +8,7 @@
 #include <mylly/renderer/shader.h>
 #include <mylly/resources/resources.h>
 #include <mylly/math/math.h>
+#include <mylly/audio/audiosystem.h>
 
 // -------------------------------------------------------------------------------------------------
 
@@ -44,6 +45,9 @@ void WarpEffect::Setup(Game* game)
 
 	// Shake the camera a bit.
 	game->GetScene()->ShakeCamera(0.3f, 0.4f);
+
+	// Play a hyperspace sound effect.
+	audio_play_sound(res_get_sound("Warp"), 0);
 }
 
 bool WarpEffect::Update(Game* game)

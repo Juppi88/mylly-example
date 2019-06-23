@@ -93,4 +93,6 @@ private:
 	PowerUpType m_currentPowerUp = POWERUP_NONE;
 
 	Editor *m_editor = nullptr;
+
+	sound_instance_t m_musicInstance = 0;
 };

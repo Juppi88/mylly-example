@@ -8,6 +8,8 @@
 #include "editor/editor.h"
 #include <mylly/core/mylly.h>
 #include <mylly/scene/scene.h>
+#include <mylly/audio/audiosystem.h>
+#include <mylly/resources/resources.h>
 
 // -------------------------------------------------------------------------------------------------
 
@@ -25,10 +27,17 @@ Game::Game(void)
 
 Game::~Game(void)
 {
+	// Stop music track.
+	if (m_musicInstance != 0) {
+		audio_stop_sound(m_musicInstance);
+	}
+
 	delete m_input;
 	delete m_ui;
 	delete m_scene;
 	delete m_editor;
+
+	m_scene = nullptr;
 
 	if (m_nextScene != nullptr) {
 		delete m_nextScene;
@@ -82,9 +91,17 @@ void Game::Update(void)
 {
 	m_editor->Process();
 
-	m_scene->Update(this);
+	if (m_scene != nullptr) {
+		m_scene->Update(this);
+	}
 
 	if (IsLoadingLevel()) {
+
+		// Fade out the scene music when scene type changes.
+		if (m_nextScene->GetType() != m_scene->GetType()) {
+			audio_set_sound_gain(m_musicInstance, m_scene->GetCameraFadeFactor());
+		}
+
 		return;
 	}
 
@@ -156,17 +173,24 @@ Vec2 Game::WrapBoundaries(const Vec2 &position) const
 
 void Game::ChangeScene(void)
 {
+	SceneType previousSceneType = SCENE_GAME;
+
 	if (m_scene != nullptr) {
 
 		// Inform the editor that the scene is changing.
 		m_editor->OnSceneUnload();
-	
+
+		previousSceneType = m_scene->GetType();
+
 		delete m_scene;
+		m_scene = nullptr;
+
 		m_collisionHandler->UnregisterAllEntities();
 	}
 
 	// Initialize the next scene.
 	m_scene = m_nextScene;
+
 	m_scene->Create(this);
 	m_scene->CalculateBoundaries(m_boundsMin, m_boundsMax);
 
@@ -180,6 +204,24 @@ void Game::ChangeScene(void)
 	m_isLevelCompleted = false;
 
 	m_nextScene = nullptr;
+
+	if (previousSceneType != m_scene->GetType()) {
+
+		// When scene type changes, also change the music track.
+		// TODO: Make the new track looping!
+		audio_stop_sound(m_musicInstance);
+
+		switch (m_scene->GetType()) {
+
+			case SCENE_GAME:
+				m_musicInstance = audio_play_sound(res_get_sound("Game"), 1);
+				break;
+
+			default:
+				m_musicInstance = audio_play_sound(res_get_sound("Menu"), 1);
+				break;
+		}
+	}
 }
 
 void Game::AddScore(uint32_t amount)

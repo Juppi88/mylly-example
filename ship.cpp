@@ -10,6 +10,7 @@
 #include <mylly/resources/resources.h>
 #include <mylly/core/time.h>
 #include <mylly/math/math.h>
+#include <mylly/audio/audiosystem.h>
 
 // -------------------------------------------------------------------------------------------------
 
@@ -193,6 +194,9 @@ void Ship::FireWeapon(Game *game)
 
 	Vec2 direction;
 	Vec2 bulletOffset;
+
+	// Play a laser fire sound effect.
+	audio_play_sound(res_get_sound("Laser"), 0);
 	
 	switch (game->GetCurrentPowerUp()) {
 
