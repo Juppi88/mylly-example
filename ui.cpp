@@ -59,7 +59,7 @@ void UI::Create(void)
 		);
 	}
 
-	m_levelLabel = Utils::CreateLabel(m_hudPanel, "Level 0", true,
+	m_levelLabel = Utils::CreateLabel(m_hudPanel, "Sector 0", true,
 		ANCHOR_MIN, 0,
 		ANCHOR_MAX, 0,
 		ANCHOR_MAX, -250,
@@ -166,7 +166,7 @@ void UI::SetShipCount(uint32_t ships)
 void UI::ShowLevelLabel(uint32_t level)
 {
 	char levelText[128];
-	snprintf(levelText, sizeof(levelText), "LEVEL %u", level);
+	snprintf(levelText, sizeof(levelText), "SECTOR %u", level);
 
 	if (level == 1) {
 		DisplayInfoLabels(levelText, "Destroy all the asteroids");
@@ -180,7 +180,7 @@ void UI::ShowLevelLabel(uint32_t level)
 
 void UI::ShowLevelCompletedLabel(void)
 {
-	DisplayInfoLabels("LEVEL COMPLETED", "Press ENTER to continue");
+	DisplayInfoLabels("SECTOR CLEARED", "Press ENTER to continue");
 }
 
 void UI::ShowRespawnLabel(void)

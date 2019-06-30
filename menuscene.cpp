@@ -32,7 +32,7 @@ void MenuScene::Create(Game *game)
 void MenuScene::SetupLevel(Game *game)
 {
 	// Select a background for the menu.
-	SetBackground(3);
+	SetBackground(4);
 
 	// Spawn some asteroids.
 	m_asteroids->SpawnInitialAsteroids(game, ASTEROID_LARGE, 3);
