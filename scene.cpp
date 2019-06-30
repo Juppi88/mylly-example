@@ -56,6 +56,14 @@ Scene::~Scene(void)
 	obj_destroy(m_directionalLights[0]->parent);
 	obj_destroy(m_directionalLights[1]->parent);
 
+	uint32_t lightIndex;
+
+	arr_foreach_iter(m_lightFlashes, lightIndex) {
+		obj_destroy(m_lightFlashes.items[lightIndex].light->parent);
+	}
+
+	arr_clear(m_lightFlashes);
+
 	if (m_sceneRoot != nullptr) {
 
 		mylly_set_scene(nullptr);
@@ -105,6 +113,26 @@ void Scene::Update(Game *game)
 {
 	if (IsShaking()) {
 		ProcessShake();
+	}
+
+	// Process light flashes.
+	float deltaTime = get_time().delta_time;
+	uint32_t lightIndex;
+
+	arr_foreach_reverse_iter(m_lightFlashes, lightIndex) {
+
+		LightFlash &flash = m_lightFlashes.items[lightIndex];
+		flash.elapsed += deltaTime;
+
+		float t = flash.elapsed / flash.duration;
+
+		if (t >= 1) {
+			obj_destroy(flash.light->parent);
+			arr_remove_at(m_lightFlashes, lightIndex);
+		}
+		else {
+			light_set_intensity(flash.light, (1 - t) * flash.intensity);
+		}
 	}
 
 	// Process fade after everything else because when the fade ends the scene can be deleted.
@@ -199,6 +227,31 @@ emitter_t *Scene::SpawnEffect(const char *effectName, const Vec2 &position) cons
 	return emitter;
 }
 
+void Scene::SpawnLightFlash(const Vec2 &position, const colour_t &colour,
+                     float intensity, float duration)
+{
+	// Create a light instance into the scene.
+	object_t *object = scene_create_object(m_sceneRoot, nullptr);
+	light_t *light = obj_add_light(object);
+
+	obj_set_position(object, vec3(position.x(), 0, position.y()));
+
+	light_set_type(light, LIGHT_POINT);
+	light_set_colour(light, colour);
+	light_set_intensity(light, intensity);
+	light_set_range(light, 20);
+
+	// Store the light to a list so it can be dimmed.
+	LightFlash flash;
+
+	flash.light = light;
+	flash.intensity = intensity;
+	flash.duration = duration;
+	flash.elapsed = 0;
+
+	arr_push(m_lightFlashes, flash);
+}
+
 void Scene::CreateCamera(void)
 {
 	// Create a camera object and add it to the scene.
@@ -287,7 +340,6 @@ void Scene::ProcessFade(Game *game)
 		obj_set_active(m_fader, false);
 
 		if (m_isFadingIn) {
-
 			// When fading in, we're loading a new scene.
 		}
 		else {

@@ -5,12 +5,22 @@
 #include <mylly/renderer/colour.h>
 #include <mylly/mgui/widget.h>
 #include <mylly/audio/audiosystem.h>
+#include <mylly/collections/array.h>
 
 // -------------------------------------------------------------------------------------------------
 
 enum SceneType {
 	SCENE_MENU,
 	SCENE_GAME
+};
+
+// -------------------------------------------------------------------------------------------------
+
+struct LightFlash {
+	light_t *light;
+	float intensity;
+	float duration;
+	float elapsed;
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -42,6 +52,8 @@ public:
 	float GetCameraFadeFactor(void) const { return m_fadeFactor; }
 
 	emitter_t *SpawnEffect(const char *effectName, const Vec2 &position) const;
+	void SpawnLightFlash(const Vec2 &position, const colour_t &colour = COL_WHITE,
+	                     float intensity = 1.0f, float duration = 1.0f);
 
 	virtual void OnEntityDestroyed(Game *game, Entity *entity) = 0;
 
@@ -81,4 +93,6 @@ protected:
 	float m_shakeDuration = 0;
 	float m_shakeIntensity = 0;
 	float m_shakeElapsed = 0;
+
+	arr_t(LightFlash) m_lightFlashes = arr_initializer;
 };

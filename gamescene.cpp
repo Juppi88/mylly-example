@@ -90,9 +90,10 @@ void GameScene::Update(Game *game)
 
 			// Spawn an explosion effect in the ship's place.
 			SpawnEffect("ship-explosion", m_ship->GetPosition());
+			SpawnLightFlash(m_ship->GetPosition(), col(255, 175, 50), 20, 0.25f);
 
 			// Shake the camera to amplify the effect.
-			game->GetScene()->ShakeCamera(1.0f, 0.5f);
+			ShakeCamera(1.0f, 0.5f);
 
 			// Play an explosion sound effect.
 			audio_play_sound(res_get_sound("Explosion"), 0);
@@ -124,6 +125,9 @@ void GameScene::Update(Game *game)
 
 			// Spawn an explosion effect in the UFO's place.
 			SpawnEffect("ship-explosion", m_ufo->GetPosition());
+			SpawnLightFlash(m_ufo->GetPosition(), col(255, 175, 50), 12, 0.25f);
+
+			ShakeCamera(0.5f, 0.3f);
 
 			// Play an explosion sound effect.
 			audio_play_sound(res_get_sound("Explosion"), 0);

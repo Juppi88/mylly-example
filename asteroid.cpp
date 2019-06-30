@@ -107,6 +107,8 @@ void Asteroid::Destroy(Game *game)
 	// Spawn a cool asteroid breaking effect.
 	game->GetScene()->SpawnEffect("asteroid-explosion", GetPosition());
 
+	game->GetScene()->SpawnLightFlash(GetPosition(), col(255, 175, 50), 10, 0.25f);
+
 	audio_play_sound(res_get_sound("SmallExplosion"), 0);
 
 	// Do final cleanup.
