@@ -291,13 +291,13 @@ bool Game::HasPlayerEarnedPowerUp(void) const
 	}
 
 	if (m_currentPowerUp == POWERUP_NONE &&
-		m_scoreSinceLastPowerUp >= 3000) {
+		m_scoreSinceLastPowerUp >= 1750) {
 
 		return true;
 	}
 
 	if (m_currentPowerUp == POWERUP_WEAPON_DOUBLE &&
-		m_scoreSinceLastPowerUp >= 5000) {
+		m_scoreSinceLastPowerUp >= 3500) {
 
 		return true;
 	}

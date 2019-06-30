@@ -68,7 +68,6 @@ public:
 
 	Editor *GetEditor(void) const { return m_editor; }
 
-private:
 	bool IsLoadingLevel(void) const { return (m_nextScene != nullptr); }
 
 private:

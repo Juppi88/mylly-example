@@ -180,7 +180,7 @@ void UI::ShowLevelLabel(uint32_t level)
 
 void UI::ShowLevelCompletedLabel(void)
 {
-	DisplayInfoLabels("SECTOR CLEARED", "Press ENTER to continue");
+	DisplayInfoLabels("SECTOR CLEAR", "Press ENTER to continue");
 }
 
 void UI::ShowRespawnLabel(void)
