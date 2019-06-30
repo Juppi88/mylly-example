@@ -208,7 +208,6 @@ void Game::ChangeScene(void)
 	if (previousSceneType != m_scene->GetType()) {
 
 		// When scene type changes, also change the music track.
-		// TODO: Make the new track looping!
 		audio_stop_sound(m_musicInstance);
 
 		switch (m_scene->GetType()) {
@@ -221,6 +220,8 @@ void Game::ChangeScene(void)
 				m_musicInstance = audio_play_sound(res_get_sound("Menu"), 1);
 				break;
 		}
+
+		audio_set_sound_looping(m_musicInstance, true);
 	}
 }
 
@@ -288,7 +289,7 @@ bool Game::HasPlayerEarnedPowerUp(void) const
 	if (m_currentPowerUp == LAST_POWERUP) {
 		return false;
 	}
-
+return true;
 	if (m_currentPowerUp == POWERUP_NONE &&
 		m_scoreSinceLastPowerUp >= 3000) {
 
@@ -308,6 +309,10 @@ void Game::OnPowerUpCollected(void)
 {
 	// Reset powerup counter.
 	m_scoreSinceLastPowerUp = 0;
+
+	// Play a powerup sound effect.
+	audio_play_sound(res_get_sound("Powerup"), 0);
+	audio_play_sound(res_get_sound("Reload"), 0);
 
 	switch (m_currentPowerUp) {
 

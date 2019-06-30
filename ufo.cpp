@@ -13,6 +13,7 @@
 #include <mylly/ai/ai.h>
 #include <mylly/ai/behaviour.h>
 #include <mylly/renderer/debug.h>
+#include <mylly/audio/audiosystem.h>
 
 // -------------------------------------------------------------------------------------------------
 
@@ -62,6 +63,16 @@ void Ufo::Spawn(Game *game)
 
 	// Rotate the UFO model so it's top side up, heading right.
 	obj_set_local_rotation(shipObject, quat_from_euler_deg(180, 90, 0));
+
+	// Attach a looping UFO engine sound to the UFO.
+	obj_add_audio_source(shipObject);
+	sound_instance_t sound = audio_play_sound_from_source(res_get_sound("UfoLoop"), shipObject->audio_source);
+
+	audio_set_sound_looping(sound, true);
+
+	// Since this is a positional audio source and the camera is actually very far from the scene,
+	// we'll increase the UFO sound's gain.
+	audio_set_sound_gain(sound, 20);
 
 	m_game = game;
 
@@ -243,6 +254,9 @@ ai_state_t Ufo::FireWeaponsWhenCloseEnough(void)
 	m_game->GetScene()->GetProjectileHandler()->FireProjectile(
 		m_game, this, GetPosition(), direction
 	);
+
+	// Play a laser fire sound effect.
+	audio_play_sound(res_get_sound("UfoLaser"), 0);
 
 	// Set weapon on cooldown.
 	m_nextWeaponFire = time + 1.0f / WEAPON_FIRE_RATE;

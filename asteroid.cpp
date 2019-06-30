@@ -10,6 +10,7 @@
 #include <mylly/resources/resources.h>
 #include <mylly/math/math.h>
 #include <mylly/renderer/debug.h>
+#include <mylly/audio/audiosystem.h>
 
 // -------------------------------------------------------------------------------------------------
 
@@ -105,6 +106,8 @@ void Asteroid::Destroy(Game *game)
 
 	// Spawn a cool asteroid breaking effect.
 	game->GetScene()->SpawnEffect("asteroid-explosion", GetPosition());
+
+	audio_play_sound(res_get_sound("SmallExplosion"), 0);
 
 	// Do final cleanup.
 	game->GetScene()->GetAsteroidHandler()->RemoveReference(this);

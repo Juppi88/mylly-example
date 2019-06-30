@@ -65,7 +65,9 @@ void GameScene::Update(Game *game)
 	}
 
 	// Check whether a UFO should appear in the game.
-	if (game->ShouldUFOSpawn() && m_ufo == nullptr) {
+	if (game->ShouldUFOSpawn() &&
+		m_ufo == nullptr &&
+		!GetAsteroidHandler()->AllAsteroidsDestroyed()) {
 
 		Vec2 spawnPosition, spawnDirection;
 		
@@ -122,6 +124,9 @@ void GameScene::Update(Game *game)
 
 			// Spawn an explosion effect in the UFO's place.
 			SpawnEffect("ship-explosion", m_ufo->GetPosition());
+
+			// Play an explosion sound effect.
+			audio_play_sound(res_get_sound("Explosion"), 0);
 
 			// Remove the UFO from the game.
 			m_ufo->Destroy(game);

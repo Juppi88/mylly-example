@@ -14,6 +14,10 @@
 
 // -------------------------------------------------------------------------------------------------
 
+constexpr float Ship::WEAPON_FIRE_RATES[3];
+
+// -------------------------------------------------------------------------------------------------
+
 Ship::Ship(void) :
 	Entity(ENTITY_SHIP)
 {
@@ -168,7 +172,7 @@ void Ship::ProcessInput(Game *game)
 	if (game->GetInputHandler()->IsFiring() && time >= m_nextWeaponFire) {
 
 		FireWeapon(game);
-		m_nextWeaponFire = time + 1.0f / WEAPON_FIRE_RATE;
+		m_nextWeaponFire = time + 1.0f / WEAPON_FIRE_RATES[game->GetCurrentPowerUp()];
 	}
 }
 
@@ -194,10 +198,8 @@ void Ship::FireWeapon(Game *game)
 
 	Vec2 direction;
 	Vec2 bulletOffset;
+	sound_instance_t sound;
 
-	// Play a laser fire sound effect.
-	audio_play_sound(res_get_sound("Laser"), 0);
-	
 	switch (game->GetCurrentPowerUp()) {
 
 		case POWERUP_WEAPON_DOUBLE:
@@ -214,6 +216,9 @@ void Ship::FireWeapon(Game *game)
 					game, this, GetPosition() + bulletOffset, direction
 				);
 			}
+
+			sound = audio_play_sound(res_get_sound("Laser2"), 0);
+			audio_set_sound_gain(sound, 50.0f);
 			break;
 
 		case POWERUP_WEAPON_WIDE:
@@ -233,6 +238,7 @@ void Ship::FireWeapon(Game *game)
 				);
 			}
 
+			audio_play_sound(res_get_sound("Laser3"), 0);
 			break;
 
 		default:
@@ -243,6 +249,9 @@ void Ship::FireWeapon(Game *game)
 			game->GetScene()->GetProjectileHandler()->FireProjectile(
 				game, this, GetPosition() + bulletOffset, direction
 			);
+
+			// Play a laser fire sound effect.
+			audio_play_sound(res_get_sound("Laser"), 0);
 			break;
 	}
 }
