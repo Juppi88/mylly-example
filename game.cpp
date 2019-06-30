@@ -289,7 +289,7 @@ bool Game::HasPlayerEarnedPowerUp(void) const
 	if (m_currentPowerUp == LAST_POWERUP) {
 		return false;
 	}
-return true;
+
 	if (m_currentPowerUp == POWERUP_NONE &&
 		m_scoreSinceLastPowerUp >= 3000) {
 

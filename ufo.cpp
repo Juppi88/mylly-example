@@ -22,7 +22,7 @@ Ufo::Ufo(void) :
 {
 	SetBoundingRadius(1.3f);
 	SetMass(150.0f);
-	SetHealth(2);
+	SetHealth(4);
 
 	// Set initial velocity.
 	SetVelocity(Vec2(1, 0));
@@ -106,7 +106,7 @@ void Ufo::OnCollideWith(const Game *game, Entity *other)
 	if (other->GetType() == ENTITY_PROJECTILE &&
 		((Projectile *)other)->IsOwnedByPlayer()) {
 
-		Kill();
+		DecreaseHealth();
 	}
 }
 

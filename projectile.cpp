@@ -31,7 +31,8 @@ void Projectile::Spawn(Game *game)
 	Entity::Spawn(game);
 
 	// Load the bullet sprite.
-	sprite_t *bulletSprite = res_get_sprite("gloweffect/4");
+	const char *spriteName = (IsOwnedByPlayer() ? "gloweffect/4" : "gloweffect-purple/4");
+	sprite_t *bulletSprite = res_get_sprite(spriteName);
 
 	if (bulletSprite == nullptr) {
 		return;
@@ -50,14 +51,22 @@ void Projectile::Spawn(Game *game)
 
 	light_set_type(light, LIGHT_POINT);
 	light_set_range(light, 10.0f);
-	light_set_colour(light, col(100, 150, 200));
 	light_set_intensity(light, 3);
 
 	// Attach a particle emitter to the projectile for a trail effect.
-	m_trailEmitter = game->GetScene()->SpawnEffect("projectile-trail", GetPosition());
+	if (IsOwnedByPlayer()) {
+
+		m_trailEmitter = game->GetScene()->SpawnEffect("projectile-trail", GetPosition());
+		light_set_colour(light, col(100, 150, 200));
+	}
+	else {
+
+		m_trailEmitter = game->GetScene()->SpawnEffect("projectile2-trail", GetPosition());
+		light_set_colour(light, col(200, 100, 150));
+	}
 
 	// Projectiles are automatically destroyed after a while if they don't hit anything.
-	m_expiresTime = get_time().time + LIFETIME;
+	m_expiresTime = get_time().time + (IsOwnedByPlayer() ? PLAYER_LIFETIME : UFO_LIFETIME);
 }
 
 void Projectile::Destroy(Game *game)
@@ -112,6 +121,8 @@ void Projectile::OnCollideWith(const Game *game, Entity *other)
 		Kill();
 
 		// Spawn a hit effect.
-		game->GetScene()->SpawnEffect("projectile-hit", GetPosition());
+		game->GetScene()->SpawnEffect(
+			IsOwnedByPlayer() ? "projectile-hit" : "projectile2-hit", GetPosition()
+		);
 	}
 }
