@@ -21,9 +21,19 @@ set(EXECUTABLE_OUTPUT_PATH ${OUTPUT_DIR})
 file(REMOVE ${OUTPUT_DIR})
 
 # Define compiler flags.
-set(CMAKE_CXX_FLAGS         "-Wall -Wextra -std=c++11 -DCGLM_ALL_UNALIGNED")
-set(CMAKE_CXX_FLAGS_DEBUG   "-g -D_DEBUG -DDEBUG")
+set(CMAKE_CXX_FLAGS         "-std=c++11 -DCGLM_ALL_UNALIGNED")
+set(CMAKE_CXX_FLAGS_DEBUG   "-D_DEBUG -DDEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE "-O4 -DNDEBUG")
+
+# Additional flags for GCC/clang.
+if (UNIX)
+	set(CMAKE_CXX_FLAGS       "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+endif ()
+
+if (MSVC)
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zi")
+endif ()
 
 # Add the CMake scripts for the engine library and editor utilities.
 add_subdirectory("mylly/mylly")
@@ -38,6 +48,11 @@ file(GLOB EXAMPLE_SRC
 # Create an executable from the source.
 add_executable(game ${EXAMPLE_SRC})
 target_link_libraries(game mylly_editor mylly)
+
+# Compiler-specific flags.
+if (MSVC)
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO")
+endif (MSVC)
 
 # Copy the game's resource files to the output directory.
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/mylly/mylly/resources/shaders DESTINATION ${OUTPUT_DIR})
