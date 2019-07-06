@@ -24,6 +24,8 @@ public:
 
 	void DestroyAllAsteroids(Game *game);
 
+	bool IsClearOfAsteroids(const Vec2 &position, float radius);
+
 private:
 	void OnAsteroidDestroyed(Asteroid *destroyed, Game *game);
 

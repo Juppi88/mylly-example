@@ -21,6 +21,7 @@ public:
 	void SetShipCount(uint32_t ships);
 
 	void ShowLevelLabel(uint32_t level);
+	void ShowUnsafeRespawnLabel(void);
 	void ShowLevelCompletedLabel(void);
 	void ShowRespawnLabel(void);
 	void ShowGameOverLabel(void);

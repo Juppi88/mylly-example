@@ -83,10 +83,27 @@ void AsteroidHandler::DestroyAllAsteroids(Game *game)
 	}
 }
 
+bool AsteroidHandler::IsClearOfAsteroids(const Vec2 &position, float radius)
+{
+	Asteroid *asteroid;
+
+	arr_foreach(m_asteroids, asteroid) {
+		
+		Vec2 direction = asteroid->GetPosition() - position;
+		float distance = direction.Normalize();
+
+		// An asteroid iswithin the safety radius.
+		if (distance < radius + asteroid->GetBoundingRadius()) {
+			return false;
+		}
+	}
+
+	// No asteroids within the safety radius.
+	return true;
+}
+
 void AsteroidHandler::OnAsteroidDestroyed(Asteroid *destroyed, Game *game)
 {
-	// TODO: Spawn some sort of an effect.
-
 	// Increment player score.
 	switch (destroyed->GetSize()) {
 

@@ -1,9 +1,11 @@
 #include "game.h"
 #include "inputhandler.h"
 #include "collisionhandler.h"
+#include "asteroidhandler.h"
 #include "utils.h"
 #include "gamescene.h"
 #include "menuscene.h"
+#include "ship.h"
 #include "ui.h"
 #include "editor/editor.h"
 #include <mylly/core/mylly.h>
@@ -122,20 +124,25 @@ void Game::Update(void)
 	if (m_isRespawning &&
 		m_input->IsPressingConfirm()) {
 
-//		#error check that it's safe to respawn!
+		// Check that there are no asteroids within or close to the spawn area.
+		if (m_scene->GetAsteroidHandler()->IsClearOfAsteroids(Vec2(0, 0), Ship::RADIUS + 1)) {
 
-		m_isRespawning = false;
+			m_isRespawning = false;
 
-		if (m_ships > 0) {
+			if (m_ships > 0) {
 
-			// The player has ships left, respawn into the middle of the map.
-			((GameScene *)m_scene)->RespawnShip(this);
+				// The player has ships left, respawn into the middle of the map.
+				((GameScene *)m_scene)->RespawnShip(this);
+			}
+			else {
+
+				// No more ships left, return to main menu.
+				m_nextScene = new MenuScene();
+				m_scene->FadeCamera(false);
+			}
 		}
 		else {
-
-			// No more ships left, return to main menu.
-			m_nextScene = new MenuScene();
-			m_scene->FadeCamera(false);
+			m_ui->ShowUnsafeRespawnLabel();
 		}
 	}
 }

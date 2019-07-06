@@ -24,6 +24,9 @@ private:
 	void UpdateControls(const InputHandler *input);
 	void FireWeapon(Game *game);
 
+public:
+	static constexpr float RADIUS = 2.0f;
+
 private:
 	static constexpr float TURN_SPEED = 180; // degrees/sec
 	static constexpr float ACCELERATION = 40; // units/sec^2

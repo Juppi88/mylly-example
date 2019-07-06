@@ -21,7 +21,7 @@ constexpr float Ship::WEAPON_FIRE_RATES[3];
 Ship::Ship(void) :
 	Entity(ENTITY_SHIP)
 {
-	SetBoundingRadius(2.0f);
+	SetBoundingRadius(RADIUS);
 	SetMass(200.0f);
 }
 

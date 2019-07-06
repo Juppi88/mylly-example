@@ -178,6 +178,12 @@ void UI::ShowLevelLabel(uint32_t level)
 	m_levelFadeEnds = get_time().time + LEVEL_DURATION;
 }
 
+void UI::ShowUnsafeRespawnLabel(void)
+{
+	DisplayInfoLabels("", "Unsafe to spawn");
+	m_levelFadeEnds = get_time().time + 2;
+}
+
 void UI::ShowLevelCompletedLabel(void)
 {
 	DisplayInfoLabels("SECTOR CLEAR", "Press ENTER to continue");
