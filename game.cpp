@@ -122,6 +122,8 @@ void Game::Update(void)
 	if (m_isRespawning &&
 		m_input->IsPressingConfirm()) {
 
+//		#error check that it's safe to respawn!
+
 		m_isRespawning = false;
 
 		if (m_ships > 0) {
