@@ -6,6 +6,7 @@
 #include <mylly/core/mylly.h>
 #include <mylly/mgui/widgets/button.h>
 #include <mylly/resources/resources.h>
+#include <mylly/io/input.h>
 
 // -------------------------------------------------------------------------------------------------
 
@@ -17,6 +18,7 @@ MenuScene::MenuScene(void) :
 MenuScene::~MenuScene(void)
 {
 	widget_destroy(m_menuPanel);
+	input_toggle_cursor(false);
 }
 
 void MenuScene::Create(Game *game)
@@ -37,6 +39,9 @@ void MenuScene::SetupLevel(Game *game)
 	// Spawn some asteroids.
 	m_asteroids->SpawnInitialAsteroids(game, ASTEROID_LARGE, 3);
 	m_asteroids->SpawnInitialAsteroids(game, ASTEROID_MEDIUM, 5);
+
+	// Show cursor in the menu.
+	input_toggle_cursor(true);
 }
 
 void MenuScene::Update(Game *game)
