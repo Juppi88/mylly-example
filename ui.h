@@ -10,10 +10,11 @@ public:
 	UI(void);
 	~UI(void);
 
-	void Create(void);
+	void Create(Game *game);
 	void Update(void);
 
 	void ToggleHUD(bool isVisible);
+	void TogglePauseMenu(bool isVisible);
 
 	void SetScore(uint32_t amount);
 	void AddScore(uint32_t amount);
@@ -29,10 +30,16 @@ public:
 	void HideInfoLabels(void);
 
 private:
+	void CreatePauseMenu(Game *game);
+
 	bool IsUpdatingScore(void) const { return (m_scoreCounterEnds != 0); }
 	bool IsFadingLevelLabel(void) const { return (m_levelFadeEnds != 0); }
 
 	void DisplayInfoLabels(const char *levelText, const char *infoText = nullptr);
+
+	static void OnClickedResume(widget_t *button);
+	static void OnClickedMainMenu(widget_t *button);
+	static void OnClickedExit(widget_t *button);
 	
 private:
 	static constexpr float SCORE_COUNTER_DURATION = 1.0f;
@@ -51,4 +58,6 @@ private:
 	uint32_t m_targetScore = 0;
 
 	float m_levelFadeEnds = 0;
+
+	widget_t *m_pauseMenuPanel = nullptr;
 };

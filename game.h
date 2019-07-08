@@ -37,6 +37,7 @@ public:
 
 	void StartNewGame(void);
 	void LoadLevel(uint32_t level);
+	void LoadMainMenu(void);
 	void ChangeScene(void);
 
 	void Update(void);
@@ -70,6 +71,9 @@ public:
 
 	bool IsLoadingLevel(void) const { return (m_nextScene != nullptr); }
 
+	void TogglePause(void);
+	bool IsPaused(void) const { return m_isPaused; }
+
 private:
 	InputHandler *m_input = nullptr;
 	CollisionHandler *m_collisionHandler = nullptr;
@@ -85,6 +89,7 @@ private:
 	uint32_t m_ships = 3;
 	bool m_isLevelCompleted = false;
 	bool m_isRespawning = false;
+	bool m_isPaused = false;
 
 	uint32_t m_scoreSinceLastUFO = 0;
 

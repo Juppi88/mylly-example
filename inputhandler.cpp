@@ -19,7 +19,7 @@ InputHandler::InputHandler(Game *game)
 	input_bind_button(BUTTON_GODMODE, 'G');
 
 	// Exit the program when escape is pressed.
-	input_bind_key(MKEY_ESCAPE, ExitApp, nullptr);
+	input_bind_key(MKEY_ESCAPE, TogglePause, game);
 	input_bind_key(MKEY_F9, ShowEditor, game);
 }
 
@@ -61,18 +61,16 @@ bool InputHandler::IsPressingGodmodeButton(void) const
 	return input_is_button_down(BUTTON_GODMODE);
 }
 
-bool InputHandler::ExitApp(uint32_t key, bool pressed, void *context)
+bool InputHandler::TogglePause(uint32_t key, bool pressed, void *context)
 {
 	UNUSED(key);
-	UNUSED(context);
-	
-	if (!pressed) {
-		return true;
+
+	if (pressed) {
+		
+		Game *game = (Game *)context;
+		game->TogglePause();
 	}
-
-	log_message("Game", "Exiting...");
-	mylly_exit();
-
+	
 	return true;
 }
 
@@ -81,11 +79,10 @@ bool InputHandler::ShowEditor(uint32_t key, bool pressed, void *context)
 	UNUSED(key);
 
 	if (!pressed) {
-		return true;
+		
+		Game *game = (Game *)context;
+		game->GetEditor()->SetVisible(!game->GetEditor()->IsVisible());
 	}
-
-	Game *game = (Game *)context;
-	game->GetEditor()->SetVisible(!game->GetEditor()->IsVisible());
 
 	return true;
 }

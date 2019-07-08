@@ -79,7 +79,7 @@ void MenuScene::CreateMainMenu(Game *game)
 	widget_set_text_font(logo, res_get_font("sofachrome rg it", 0));
 
 	// Create menu buttons.
-	widget_t *startGameButton = Utils::CreateButton(logo, "START",
+	widget_t *startGameButton = Utils::CreateButton(logo, "START", false,
 		ANCHOR_MIDDLE, -150,
 		ANCHOR_MIDDLE, 150,
 		ANCHOR_MAX, 125,
@@ -90,7 +90,7 @@ void MenuScene::CreateMainMenu(Game *game)
 	widget_set_hovered_handler(startGameButton, OnButtonHovered);
 	widget_set_user_context(startGameButton, game);
 
-	widget_t *exitGameButton = Utils::CreateButton(startGameButton, "EXIT",
+	widget_t *exitGameButton = Utils::CreateButton(startGameButton, "EXIT", false,
 		ANCHOR_MIN, 0,
 		ANCHOR_MAX, 0,
 		ANCHOR_MAX, 50,

@@ -9,6 +9,7 @@
 #include "ui.h"
 #include "editor/editor.h"
 #include <mylly/core/mylly.h>
+#include <mylly/core/time.h>
 #include <mylly/scene/scene.h>
 #include <mylly/audio/audiosystem.h>
 #include <mylly/resources/resources.h>
@@ -54,7 +55,7 @@ void Game::SetupGame(void)
 	m_editor->Create();
 
 	// Setup UI.
-	m_ui->Create();
+	m_ui->Create(this);
 
 	// Load the main menu scene.
 	m_nextScene = new MenuScene();
@@ -87,6 +88,14 @@ void Game::LoadLevel(uint32_t level)
 	// ChangeScene in this class.
 	m_nextScene = new GameScene();
 	m_scene->FadeCamera(false);
+}
+
+void Game::LoadMainMenu(void)
+{
+	m_nextScene = new MenuScene();
+	m_scene->FadeCamera(false);
+
+	m_ui->TogglePauseMenu(false);
 }
 
 void Game::Update(void)
@@ -122,6 +131,7 @@ void Game::Update(void)
 	}
 
 	if (m_isRespawning &&
+		!m_isPaused &&
 		m_input->IsPressingConfirm()) {
 
 		// Check that there are no asteroids within or close to the spawn area.
@@ -183,6 +193,11 @@ Vec2 Game::WrapBoundaries(const Vec2 &position) const
 void Game::ChangeScene(void)
 {
 	SceneType previousSceneType = SCENE_GAME;
+
+	// Unpause.
+	if (m_isPaused) {
+		TogglePause();
+	}
 
 	if (m_scene != nullptr) {
 
@@ -337,4 +352,19 @@ void Game::OnPowerUpCollected(void)
 			m_currentPowerUp = LAST_POWERUP; // No more powerups to be earned!
 			break;
 	}
+}
+
+void Game::TogglePause(void)
+{
+	// Allow pausing in the game but not in the main menu.
+	if (m_scene->GetType() != SCENE_GAME) {
+		return;
+	}
+
+	m_isPaused = !m_isPaused;
+
+	time_set_scale(m_isPaused ? 0 : 1);
+
+	m_ui->TogglePauseMenu(m_isPaused);
+	input_toggle_cursor(m_isPaused);
 }

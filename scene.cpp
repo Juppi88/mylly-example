@@ -182,7 +182,7 @@ void Scene::FadeCamera(bool fadeIn)
 {
 	m_fadeFactor = (fadeIn ? 0 : 1);
 	m_isFadingIn = fadeIn;
-	m_fadeEffectEnds = get_time().time + FADE_DURATION;
+	m_fadeEffectEnds = get_time().real_time + FADE_DURATION;
 
 	// Activate the fader object and set its starting colour.
 	obj_set_active(m_fader, true);
@@ -331,7 +331,7 @@ void Scene::SetupLighting(void)
 
 void Scene::ProcessFade(Game *game)
 {
-	float time = get_time().time;
+	float time = get_time().real_time;
 
 	if (time >= m_fadeEffectEnds) {
 
@@ -396,5 +396,5 @@ void Scene::ProcessShake(void)
 
 	obj_set_position(m_camera->parent, position.vec());
 
-	m_shakeElapsed += get_time().delta_time;
+	m_shakeElapsed += get_time().real_delta_time;
 }

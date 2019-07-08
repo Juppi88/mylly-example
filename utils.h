@@ -21,7 +21,7 @@ public:
 	                                   Vec2 &position, Vec2 &direction);
 
 	// UI helpers for quickly creating UI widgets.
-	static widget_t *CreateButton(widget_t *parent, const char *text,
+	static widget_t *CreateButton(widget_t *parent, const char *text, bool hasBackground,
 	                              anchor_type_t left_type, int16_t left_offset,
 	                              anchor_type_t right_type, int16_t right_offset,
 	                              anchor_type_t top_type, int16_t top_offset,

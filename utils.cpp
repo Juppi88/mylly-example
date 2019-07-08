@@ -95,7 +95,7 @@ void Utils::GetRandomSpawnPosition(const Vec2 &boundsMin, const Vec2 &boundsMax,
 	}
 }
 
-widget_t *Utils::CreateButton(widget_t *parent, const char *text,
+widget_t *Utils::CreateButton(widget_t *parent, const char *text, bool hasBackground,
                               anchor_type_t left_type, int16_t left_offset,
                               anchor_type_t right_type, int16_t right_offset,
                               anchor_type_t top_type, int16_t top_offset,
@@ -103,13 +103,24 @@ widget_t *Utils::CreateButton(widget_t *parent, const char *text,
 {
 	widget_t *button = button_create(parent);
 
-	widget_set_text_font(button, res_get_font("Oxanium-Medium", 48));
-	widget_set_text_colour(button, LABEL_COLOUR);
 	widget_set_text_s(button, text);
 
 	widget_set_anchors(button,
 	                   left_type, left_offset, right_type, right_offset,
 	                   top_type, top_offset, bottom_type, bottom_offset);
+
+	if (hasBackground) {
+
+		widget_set_sprite(button, res_get_sprite("ui-white/button02"));
+		widget_set_text_font(button, res_get_font("Oxanium-Medium", 32));
+		widget_set_text_colour(button, COL_WHITE);
+		button_set_colours(button, col(35, 35, 35), col(50, 50, 50), col(20, 20, 20));
+	}
+	else {
+
+		widget_set_text_font(button, res_get_font("Oxanium-Medium", 48));
+		widget_set_text_colour(button, LABEL_COLOUR);
+	}
 
 	return button;
 }

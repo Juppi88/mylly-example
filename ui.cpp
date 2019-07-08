@@ -1,6 +1,8 @@
 #include "ui.h"
 #include "utils.h"
+#include "game.h"
 #include <mylly/core/time.h>
+#include <mylly/core/mylly.h>
 #include <mylly/mgui/widget.h>
 #include <mylly/mgui/widgets/panel.h>
 #include <mylly/resources/resources.h>
@@ -18,7 +20,7 @@ UI::~UI(void)
 	widget_destroy(m_hudPanel);
 }
 
-void UI::Create(void)
+void UI::Create(Game *game)
 {
 	m_hudPanel = widget_create(nullptr);
 
@@ -73,8 +75,12 @@ void UI::Create(void)
 		ANCHOR_MAX, -100
 	);
 
+	// Create the pause menu.
+	CreatePauseMenu(game);
+
 	// Hide HUD and help/level labels until they're acticated.
 	ToggleHUD(false);
+	TogglePauseMenu(false);
 }
 
 void UI::Update(void)
@@ -82,7 +88,7 @@ void UI::Update(void)
 	// Scroll score.
 	if (IsUpdatingScore()) {
 
-		float time = get_time().time;
+		float time = get_time().real_time;
 
 		if (time < m_scoreCounterEnds) {
 
@@ -100,7 +106,7 @@ void UI::Update(void)
 	// Fade out the level label.
 	if (IsFadingLevelLabel()) {
 
-		float time = get_time().time;
+		float time = get_time().real_time;
 		colour_t colour = Utils::LABEL_COLOUR;
 
 		if (time < m_levelFadeEnds) {
@@ -136,6 +142,11 @@ void UI::ToggleHUD(bool isVisible)
 	}
 }
 
+void UI::TogglePauseMenu(bool isVisible)
+{
+	widget_set_visible(m_pauseMenuPanel, isVisible);
+}
+
 void UI::SetScore(uint32_t amount)
 {
 	m_currentScore = amount;
@@ -149,7 +160,7 @@ void UI::AddScore(uint32_t amount)
 {
 	m_previousScore = m_currentScore;
 	m_targetScore = m_targetScore + amount;
-	m_scoreCounterEnds = get_time().time + SCORE_COUNTER_DURATION;
+	m_scoreCounterEnds = get_time().real_time + SCORE_COUNTER_DURATION;
 }
 
 void UI::SetShipCount(uint32_t ships)
@@ -175,13 +186,13 @@ void UI::ShowLevelLabel(uint32_t level)
 		DisplayInfoLabels(levelText);
 	}
 
-	m_levelFadeEnds = get_time().time + LEVEL_DURATION;
+	m_levelFadeEnds = get_time().real_time + LEVEL_DURATION;
 }
 
 void UI::ShowUnsafeRespawnLabel(void)
 {
 	DisplayInfoLabels("", "Unsafe to spawn");
-	m_levelFadeEnds = get_time().time + 2;
+	m_levelFadeEnds = get_time().real_time + 2;
 }
 
 void UI::ShowLevelCompletedLabel(void)
@@ -220,4 +231,79 @@ void UI::DisplayInfoLabels(const char *levelText, const char *infoText)
 	}
 
 	m_levelFadeEnds = 0;
+}
+
+void UI::CreatePauseMenu(Game *game)
+{
+	m_pauseMenuPanel = panel_create(nullptr);
+
+	widget_set_sprite(m_pauseMenuPanel, res_get_sprite("ui-white/textbox_02"));
+
+	widget_set_anchors(m_pauseMenuPanel,
+		ANCHOR_MIDDLE, -150,
+		ANCHOR_MIDDLE, 150,
+		ANCHOR_MIDDLE, -180,
+		ANCHOR_MIDDLE, 180
+	);
+
+	widget_set_colour(m_pauseMenuPanel, col_a(10, 10, 10, 175));
+
+	widget_t *label = Utils::CreateLabel(m_pauseMenuPanel, "PAUSED", false,
+		ANCHOR_MIN, 0,
+		ANCHOR_MAX, 0,
+		ANCHOR_MIN, 20,
+		ANCHOR_MIN, 70
+	);
+
+	widget_set_text_colour(label, COL_WHITE);
+
+	// Menu buttons
+	widget_t *button;
+
+	button = Utils::CreateButton(m_pauseMenuPanel, "Resume", true,
+		ANCHOR_MIN, 20,
+		ANCHOR_MAX, -20,
+		ANCHOR_MIN, 120,
+		ANCHOR_MIN, 170
+	);
+
+	widget_set_user_context(button, game);
+	button_set_clicked_handler(button, OnClickedResume);
+
+	button = Utils::CreateButton(m_pauseMenuPanel, "Main Menu", true,
+		ANCHOR_MIN, 20,
+		ANCHOR_MAX, -20,
+		ANCHOR_MIN, 190,
+		ANCHOR_MIN, 240
+	);
+
+	widget_set_user_context(button, game);
+	button_set_clicked_handler(button, OnClickedMainMenu);
+
+	button = Utils::CreateButton(m_pauseMenuPanel, "Quit", true,
+		ANCHOR_MIN, 20,
+		ANCHOR_MAX, -20,
+		ANCHOR_MIN, 260,
+		ANCHOR_MIN, 310
+	);
+
+	button_set_clicked_handler(button, OnClickedExit);
+}
+
+void UI::OnClickedResume(widget_t *button)
+{
+	Game *game = (Game *)button->user_context;
+	game->TogglePause();
+}
+
+void UI::OnClickedMainMenu(widget_t *button)
+{
+	Game *game = (Game *)button->user_context;
+	game->LoadMainMenu();
+}
+
+void UI::OnClickedExit(widget_t *button)
+{
+	UNUSED(button);
+	mylly_exit();
 }

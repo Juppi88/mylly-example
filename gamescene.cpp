@@ -113,7 +113,10 @@ void GameScene::Update(Game *game)
 			}
 		}
 		else {
-			m_ship->ProcessInput(game);
+			if (!game->IsPaused()) {
+				m_ship->ProcessInput(game);
+			}
+			
 			m_ship->Update(game);
 		}
 	}

@@ -32,6 +32,6 @@ public:
 	bool IsPressingGodmodeButton(void) const;
 
 private:
-	static bool ExitApp(uint32_t key, bool pressed, void *context);
+	static bool TogglePause(uint32_t key, bool pressed, void *context);
 	static bool ShowEditor(uint32_t key, bool pressed, void *context);
 };
