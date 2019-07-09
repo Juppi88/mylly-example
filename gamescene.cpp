@@ -31,6 +31,9 @@ GameScene::~GameScene(void)
 void GameScene::Create(Game *game)
 {
 	Scene::Create(game);
+
+	game->GetUI()->ToggleMainMenu(false);
+	game->GetUI()->ToggleControlsMenu(false);
 }
 
 void GameScene::SetupLevel(Game *game)

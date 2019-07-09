@@ -15,14 +15,4 @@ public:
 	virtual void Update(Game *game) override;
 
 	virtual void OnEntityDestroyed(Game *game, Entity *entity) override;
-
-private:
-	void CreateMainMenu(Game *game);
-	
-	static void OnButtonHovered(widget_t *button, bool hovered);
-	static void OnSelectedStartGame(widget_t *button);
-	static void OnSelectedExitGame(widget_t *button);
-
-private:
-	widget_t *m_menuPanel = nullptr;
 };
