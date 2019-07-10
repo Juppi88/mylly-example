@@ -1,6 +1,7 @@
 #include "entity.h"
 #include "game.h"
 #include "collisionhandler.h"
+#include "editor/editor.h"
 #include <mylly/scene/object.h>
 #include <mylly/renderer/debug.h>
 
@@ -44,24 +45,27 @@ void Entity::Destroy(Game *game)
 
 void Entity::Update(Game *game)
 {
-	// Draw the collider boundaries.
-	colour_t circleColour = COL_GREEN;
+	// Draw collider boundaries if the editor mode is on.
+	if (game->GetEditor()->IsVisible()) {
 
-	if (IsColliding()) {
-		circleColour = COL_RED;
+		colour_t circleColour = COL_GREEN;
+
+		if (IsColliding()) {
+			circleColour = COL_RED;
+		}
+
+		debug_draw_circle(GetScenePosition().vec(), m_boundingRadius, circleColour, false);
+
+		// Draw a line to indicate the entity's direction.
+		Vec2 direction = GetVelocity();
+		float speed = direction.Normalize();
+
+		Vec3 sceneDirection = Vec3(direction.x(), 0, direction.y());
+		sceneDirection *= 0.5f * speed;
+		sceneDirection += GetScenePosition();
+
+		debug_draw_line(GetScenePosition().vec(), sceneDirection.vec(), COL_GREEN, false);
 	}
-
-	//debug_draw_circle(GetScenePosition().vec(), m_boundingRadius, circleColour, false);
-
-	// Draw a line to indicate the entity's direction.
-	Vec2 direction = GetVelocity();
-	float speed = direction.Normalize();
-
-	Vec3 sceneDirection = Vec3(direction.x(), 0, direction.y());
-	sceneDirection *= 0.5f * speed;
-	sceneDirection += GetScenePosition();
-
-	//debug_draw_line(GetScenePosition().vec(), sceneDirection.vec(), COL_GREEN, false);
 
 	// Reset collision entity on each frame before recalculating collisions.
 	m_previousCollisionEntity = m_collisionEntity;

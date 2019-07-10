@@ -15,7 +15,7 @@ public:
 	void Update(void);
 
 	void ToggleHUD(bool isVisible);
-	void ToggleMainMenu(bool isVisible);
+	void ToggleMainMenu(bool isVisible, bool alsoLogo = true);
 	void TogglePauseMenu(bool isVisible);
 	void ToggleControlsMenu(bool isVisible);
 
@@ -80,6 +80,7 @@ private:
 	widget_t *m_pauseMenuPanel = nullptr;
 	widget_t *m_controlsPanel = nullptr;
 
+	widget_t *m_mainMenuLogo = nullptr;
 	widget_t *m_scoreLabel = nullptr;
 	widget_t *m_levelLabel = nullptr;
 	widget_t *m_helpLabel = nullptr;

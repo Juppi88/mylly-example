@@ -58,7 +58,11 @@ bool InputHandler::IsPressingConfirm(void) const
 
 bool InputHandler::IsPressingGodmodeButton(void) const
 {
+#ifdef DEBUG
 	return input_is_button_down(BUTTON_GODMODE);
+#else
+	return false;
+#endif
 }
 
 bool InputHandler::TogglePause(uint32_t key, bool pressed, void *context)

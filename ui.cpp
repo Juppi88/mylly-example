@@ -111,9 +111,13 @@ void UI::TogglePauseMenu(bool isVisible)
 	widget_set_visible(m_pauseMenuPanel, isVisible);
 }
 
-void UI::ToggleMainMenu(bool isVisible)
+void UI::ToggleMainMenu(bool isVisible, bool alsoLogo)
 {
 	widget_set_visible(m_mainMenuPanel, isVisible);
+
+	if (alsoLogo) {
+		widget_set_visible(m_mainMenuLogo, isVisible);
+	}
 }
 
 void UI::ToggleControlsMenu(bool isVisible)
@@ -269,29 +273,30 @@ void UI::CreateMainMenu(Game *game)
 {
 	// Create a container widget for the main menu and align it to the centre of the screen.
 	m_mainMenuPanel = widget_create(nullptr);
-	widget_set_anchors(m_mainMenuPanel,
-		ANCHOR_MIDDLE, -500,
-		ANCHOR_MIDDLE, +500,
-		ANCHOR_MIDDLE, -300,
-		ANCHOR_MIDDLE, +300
-	);
 
-	// Create the logo.
-	widget_t *logo = CreateLabel(m_mainMenuPanel, "ASTEROIDS", true,
+	widget_set_anchors(m_mainMenuPanel,
 		ANCHOR_MIN, 0,
 		ANCHOR_MAX, 0,
 		ANCHOR_MIN, 0,
-		ANCHOR_MIN, 50
+		ANCHOR_MAX, 0
 	);
 
-	widget_set_text_font(logo, res_get_font("sofachrome rg it", 0));
+	// Create the logo.
+	m_mainMenuLogo = CreateLabel(nullptr, "ASTEROIDS", true,
+		ANCHOR_MIDDLE, -500,
+		ANCHOR_MIDDLE, 500,
+		ANCHOR_MIDDLE, -325,
+		ANCHOR_MIDDLE, -275
+	);
+
+	widget_set_text_font(m_mainMenuLogo, res_get_font("sofachrome rg it", 0));
 
 	// Create menu buttons.
-	widget_t *startGameButton = CreateButton(logo, "START", false,
+	widget_t *startGameButton = CreateButton(m_mainMenuPanel, "START", false,
 		ANCHOR_MIDDLE, -250,
 		ANCHOR_MIDDLE, 250,
-		ANCHOR_MAX, 125,
-		ANCHOR_MAX, 175
+		ANCHOR_MIDDLE, -135,
+		ANCHOR_MIDDLE, -85
 	);
 
 	button_set_clicked_handler(startGameButton, OnClickedStartGame);
@@ -575,7 +580,7 @@ void UI::OnClickedControls(widget_t *button)
 	UI *self = (UI *)button->user_context;
 
 	self->ToggleControlsMenu(true);
-	self->ToggleMainMenu(false);
+	self->ToggleMainMenu(false, false);
 }
 
 void UI::OnClickedCloseControls(widget_t *button)
