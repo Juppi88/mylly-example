@@ -56,10 +56,11 @@ endif (MSVC)
 
 # Copy the game's resource files to the output directory.
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/mylly/mylly/resources/shaders DESTINATION ${OUTPUT_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/editor/resources/textures DESTINATION ${OUTPUT_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/editor/resources/fonts DESTINATION ${OUTPUT_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/effects DESTINATION ${OUTPUT_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/fonts DESTINATION ${OUTPUT_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/models DESTINATION ${OUTPUT_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/shaders DESTINATION ${OUTPUT_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/sounds DESTINATION ${OUTPUT_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/textures DESTINATION ${OUTPUT_DIR})
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/editor/resources/textures DESTINATION ${OUTPUT_DIR})

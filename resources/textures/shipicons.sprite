@@ -1,0 +1,14 @@
+{
+	version: 1,
+	pixels_per_unit: 20,
+	sprites: [
+		{
+			name: "red",
+			pos_x: 68,
+			pos_y: 198,
+			flip_y: true,
+			width: 35,
+			height: 35,
+		},
+	],
+}

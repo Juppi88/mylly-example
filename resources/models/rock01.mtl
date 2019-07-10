@@ -1,0 +1,11 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl asteroid
+Kd 0.2 0.2 0.2
+Ks 0.35 0.35 0.35
+d 1
+Ns 1
+map_Kd rock_diffuse.png
+norm rocktest_normal.png
+illum 2

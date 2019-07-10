@@ -1,0 +1,13 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl Default
+Ns 10.0
+Ka 0.60000 0.60000 0.60000
+Kd 0.60000 0.60000 0.60000
+Ks 0.300000 0.300000 0.300000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd sciFiCrate1_albedo.png
+norm sciFiCrate1_normal.png

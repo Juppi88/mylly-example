@@ -1,0 +1,16 @@
+# Blender MTL File: 'scifi_plane_1k.blend'
+# Material Count: 1
+
+newmtl scifi_plane_1k
+Ns 96.078431
+Ka 0.800000 0.800000 0.800000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump scifi_plane_nor.png
+map_Kd scifi_plane_dif.png
+map_Ks scifi_plane_spec.png
+map_Ns scifi_plane_spec.png

@@ -1,0 +1,37 @@
+Models:
+Scifi Plane: https://opengameart.org/content/scifi-plane
+Desert Rock: https://opengameart.org/content/desert-rock
+Simple UFO: https://opengameart.org/content/simple-ufo
+Sci-Fi Crate: https://opengameart.org/content/sci-fi-crate-0
+
+Textures/sprites:
+Space Skyboxes: https://opengameart.org/content/space-skyboxes-0
+Ulukai's Space Skyboxes: https://opengameart.org/content/ulukais-space-skyboxes
+Space ship building bits: https://opengameart.org/content/space-ship-building-bits-volume-1
+UI pack: https://opengameart.org/content/ui-pack
+Smoke Particle Assets: https://opengameart.org/content/smoke-particle-assets
+Explosion Particles Sprite Atlas: https://opengameart.org/content/explosion-particles-sprite-atlas
+5x special effects - 2D: https://opengameart.org/content/5x-special-effects-2d
+
+Sounds:
+Explosion: http://soundbible.com/1469-Depth-Charge-Short.html
+Laser: https://www.freesfx.co.uk/
+Laser2: https://freesound.org/people/soundslikewillem/sounds/190707/
+Laser3: https://freesound.org/people/bubaproducer/sounds/151022/
+Warp: https://freesound.org/people/Assimulation_Gaming/sounds/330402/
+Reload: https://freesound.org/people/nioczkus/sounds/396331/
+Powerup: https://freesound.org/people/OwlStorm/sounds/404770/
+UfoLaser: https://freesound.org/people/sunnyflower/sounds/361471/
+UfoLoop: https://freesound.org/people/timgormly/sounds/162815/
+SmallExplosion: https://freesound.org/people/V-ktor/sounds/435414/
+
+Music:
+Menu: https://opengameart.org/content/space-ambient
+Game: http://freemusicarchive.org/music/Metre/Circuit_1731/Glider_1583
+
+Fonts:
+Oxanium: https://www.dafont.com/oxanium.font
+Sofachrome: https://www.dafont.com/sofachrome.font
+Louis George Café: https://www.dafont.com/louis-george-caf.font
+Connection II: https://www.dafont.com/connection-ii.font
+SGK075: https://www.dafont.com/sgk075.font

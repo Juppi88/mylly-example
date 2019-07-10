@@ -1,0 +1,14 @@
+{
+  version: 1,
+  pixels_per_unit: 1,
+  sprites: [
+    {
+      name: "1",
+      pos_x: 0,
+      pos_y: 170,
+      flip_y: true,
+      width: 170,
+      height: 170,
+    },
+  ],
+}

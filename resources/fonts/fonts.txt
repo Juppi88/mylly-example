@@ -1,0 +1,12 @@
+# File format: <font size> <first glyph> <last glyph> <font file name>
+72 32 127 sofachrome rg.ttf
+72 32 127 sofachrome rg it.ttf
+32 32 127 Oxanium-Medium.ttf
+48 32 127 Oxanium-Medium.ttf
+52 32 127 Oxanium-ExtraBold.ttf
+16 32 127 SGK075.ttf
+32 32 127 SGK075.ttf
+10 32 127 ConnectionII.otf
+20 32 127 ConnectionII.otf
+14 32 127 Louis George Cafe.ttf
+12 32 127 Louis George Cafe.ttf
