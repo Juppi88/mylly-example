@@ -51,6 +51,13 @@ Game::~Game(void)
 
 void Game::SetupGame(void)
 {
+	// Set a minimal virtual resolution for the UI.
+	mgui_set_min_resolution(1920, 1080);
+
+	// Adjust audio channels.
+	// TODO: Maybe an options window would be a good idea for this?
+	audio_set_group_gain(0, 0.5f);
+
 	// Create the editor windows.
 	m_editor->Create();
 
