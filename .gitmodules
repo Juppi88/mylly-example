@@ -1,6 +1,6 @@
 [submodule "mylly"]
 	path = mylly
-	url = https://git.project-apollo.co.uk/mylly/mylly-engine.git
+	url = https://github.com/Juppi88/mylly-engine.git
 [submodule "editor"]
 	path = editor
-	url = https://git.project-apollo.co.uk/mylly/mylly-editor.git
+	url = https://github.com/Juppi88/mylly-editor.git
