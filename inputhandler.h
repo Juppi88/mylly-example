@@ -34,4 +34,5 @@ public:
 private:
 	static bool TogglePause(uint32_t key, bool pressed, void *context);
 	static bool ShowEditor(uint32_t key, bool pressed, void *context);
+	static bool ToggleOverrideRenderBuffer(uint32_t key, bool pressed, void *context);
 };

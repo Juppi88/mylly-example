@@ -13,6 +13,7 @@
 #include <mylly/scene/scene.h>
 #include <mylly/audio/audiosystem.h>
 #include <mylly/resources/resources.h>
+#include <mylly/renderer/rendersystem.h>
 
 // -------------------------------------------------------------------------------------------------
 

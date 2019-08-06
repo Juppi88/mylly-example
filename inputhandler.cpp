@@ -4,6 +4,7 @@
 #include <mylly/core/mylly.h>
 #include <mylly/io/input.h>
 #include <mylly/io/log.h>
+#include <mylly/renderer/renderer.h>
 
 // -------------------------------------------------------------------------------------------------
 
@@ -21,6 +22,7 @@ InputHandler::InputHandler(Game *game)
 	// Exit the program when escape is pressed.
 	input_bind_key(MKEY_ESCAPE, TogglePause, game);
 	input_bind_key(MKEY_F9, ShowEditor, game);
+	input_bind_key(MKEY_F5, ToggleOverrideRenderBuffer, nullptr);
 }
 
 InputHandler::~InputHandler(void)
@@ -86,6 +88,25 @@ bool InputHandler::ShowEditor(uint32_t key, bool pressed, void *context)
 		
 		Game *game = (Game *)context;
 		game->GetEditor()->SetVisible(!game->GetEditor()->IsVisible());
+	}
+
+	return true;
+}
+
+bool InputHandler::ToggleOverrideRenderBuffer(uint32_t key, bool pressed, void *context)
+{
+	UNUSED(key);
+	UNUSED(context);
+
+	if (pressed) {
+
+		static int gbuffer = GBUFFER_NONE;
+
+		if (++gbuffer >= NUM_GBUFFER_COMPONENTS) {
+			gbuffer = GBUFFER_NONE;
+		}
+
+		rend_override_draw_gbuffer((gbuffer_component_t)gbuffer);
 	}
 
 	return true;

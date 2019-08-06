@@ -26,6 +26,7 @@ int main(int argc, char **argv)
 
 	params.callbacks.on_loop = MainLoop;
 	params.callbacks.on_exit = Cleanup;
+	params.renderer.use_deferred_lighting = true;
 
 	strcpy(params.splash.logo_path, "./textures/splash.png");
 

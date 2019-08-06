@@ -322,7 +322,7 @@ void Scene::SetupLighting(void)
 
 		light_set_type(light, LIGHT_DIRECTIONAL);
 		light_set_colour(light, background.directionalLight);
-		light_set_intensity(light, background.lightIntensities[i]);
+		light_set_intensity(light, 0.5f * background.lightIntensities[i]);
 
 		Vec2 direction = background.lightDirections[i];
 		light_set_direction(light, vec3(direction.x(), -3, direction.y()));
