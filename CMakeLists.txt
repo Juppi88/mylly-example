@@ -52,9 +52,28 @@ target_link_libraries(game mylly_editor mylly)
 # Compiler-specific flags.
 if (MSVC)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO")
+
+	# Visual Studio appends either Debug/ or Release/ to the build path based on configuration.
+	if (CMAKE_BUILD_TYPE EQUAL "DEBUG")
+		set(OUTPUT_DIR ${OUTPUT_DIR}/Debug)
+	else ()
+		set(OUTPUT_DIR ${OUTPUT_DIR}/Release)
+	endif ()
+
+
+	# Copy dependency libraries to build path.
+	set(EXT_LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/mylly/external")
+
+	file(COPY ${EXT_LIB_PATH}/freetype/bin/freetype.dll DESTINATION ${OUTPUT_DIR})
+	file(COPY ${EXT_LIB_PATH}/jpeg/bin/jpeg62.dll DESTINATION ${OUTPUT_DIR})
+	file(COPY ${EXT_LIB_PATH}/libpng/bin/libpng3.dll DESTINATION ${OUTPUT_DIR})
+	file(COPY ${EXT_LIB_PATH}/libpng/bin/libpng12.dll DESTINATION ${OUTPUT_DIR})
+	file(COPY ${EXT_LIB_PATH}/openal/bin/Win32/soft_oal.dll DESTINATION ${OUTPUT_DIR})
+	file(COPY ${EXT_LIB_PATH}/zlib/bin/zlib1.dll DESTINATION ${OUTPUT_DIR})
 endif (MSVC)
 
 # Copy the game's resource files to the output directory.
+
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/mylly/mylly/resources/shaders DESTINATION ${OUTPUT_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/editor/resources/textures DESTINATION ${OUTPUT_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/editor/resources/fonts DESTINATION ${OUTPUT_DIR})
