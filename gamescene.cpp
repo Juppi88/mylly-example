@@ -42,7 +42,13 @@ void GameScene::SetupLevel(Game *game)
 	SetBackground(game->GetLevel() - 1);
 
 	// Spawn some asteroids.
-	m_asteroids->SpawnInitialAsteroids(game, ASTEROID_LARGE, 2 + game->GetLevel());
+	uint32_t asteroidCount = 2 + game->GetLevel();
+
+	if (game->GetLevel() > 4) {
+		asteroidCount += (game->GetLevel() - 4);
+	}
+
+	m_asteroids->SpawnInitialAsteroids(game, ASTEROID_LARGE, asteroidCount);
 
 	// Fade in to start the level.
 	FadeCamera(true);

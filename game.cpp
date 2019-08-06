@@ -57,6 +57,7 @@ void Game::SetupGame(void)
 
 	// Adjust audio channels.
 	// TODO: Maybe an options window would be a good idea for this?
+	audio_set_master_gain(0.75f);
 	audio_set_group_gain(0, 0.5f);
 
 	// Create the editor windows.
@@ -275,8 +276,8 @@ float Game::GetDifficultyMultiplier(void) const
 	// its maximum value of 2 on level 10.
 	float difficulty = 1.0f + (m_currentLevel - 1) / (10.0f - 1);
 
-	if (difficulty > 2) {
-		difficulty = 2;
+	if (difficulty > 2.5f) {
+		difficulty = 2.5f;
 	}
 
 	return difficulty;
@@ -303,13 +304,13 @@ void Game::OnShipDestroyed(void)
 bool Game::ShouldUFOSpawn(void) const
 {
 	if (m_currentLevel < 3) {
-		return (m_scoreSinceLastUFO >= 2500);
+		return (m_scoreSinceLastUFO >= 2250);
 	}
 	else if (m_currentLevel < 5) {
-		return (m_scoreSinceLastUFO >= 3500);
+		return (m_scoreSinceLastUFO >= 3000);
 	}
 	else if (m_currentLevel < 7) {
-		return (m_scoreSinceLastUFO >= 4500);
+		return (m_scoreSinceLastUFO >= 4000);
 	}
 
 	return (m_scoreSinceLastUFO >= 5000);
@@ -323,13 +324,13 @@ bool Game::HasPlayerEarnedPowerUp(void) const
 	}
 
 	if (m_currentPowerUp == POWERUP_NONE &&
-		m_scoreSinceLastPowerUp >= 1750) {
+		m_scoreSinceLastPowerUp >= 1250) {
 
 		return true;
 	}
 
 	if (m_currentPowerUp == POWERUP_WEAPON_DOUBLE &&
-		m_scoreSinceLastPowerUp >= 3500) {
+		m_scoreSinceLastPowerUp >= 2500) {
 
 		return true;
 	}
